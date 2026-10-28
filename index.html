@@ -1,699 +1,1139 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-canvas-width="1440" data-canvas-height="900">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AR重塑儿科术前宣教工作 | INT6140 小组项目</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #0d6efd;
-      --primary-dark: #0a58ca;
-      --accent: #20c997;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --text-light: #64748b;
-      --border: #e2e8f0;
-      --gradient: linear-gradient(135deg, #0d6efd 0%, #6610f2 50%, #20c997 100%);
-      --shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AR儿童术前可视化宣教系统 · 未来工作与人力趋势研究</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230e3a5f'/%3E%3Cpath d='M20 32a12 12 0 0 1 24 0M20 32a12 12 0 0 0 24 0M32 20v24' stroke='%2340d6e0' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23ffb36b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --ink:#0e2233;
+  --ink-soft:#34506b;
+  --deep:#0b1e31;
+  --deep-2:#0e2a44;
+  --cyan:#27c7d6;
+  --cyan-soft:#7ce3ec;
+  --coral:#ff9a6b;
+  --coral-soft:#ffc39e;
+  --paper:#f4f8fa;
+  --card:#ffffff;
+  --line:#dce9ef;
+  --muted:#6b8498;
+  --shadow:0 14px 40px rgba(14,42,68,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:"Noto Serif SC","Songti SC",Georgia,serif}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+section{position:relative}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* ===== 顶部导航 ===== */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  background:rgba(11,30,49,.72);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(124,227,236,.14);
+}
+.topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;color:#eef7fb;font-weight:500;font-size:14px;letter-spacing:.02em}
+.brand .logo{width:30px;height:30px;flex:none}
+.navlinks{display:none;gap:22px;font-size:13.5px;color:#bcd6e2}
+.navlinks a{transition:color .2s}
+.navlinks a:hover{color:#fff}
+.nav-cta{font-size:13px;color:#08182a;background:var(--cyan-soft);padding:8px 16px;border-radius:999px;font-weight:600}
+@media(min-width:820px){.navlinks{display:flex}}
+.menu-btn{display:block;background:none;border:1px solid rgba(124,227,236,.4);color:#d8ecf4;width:40px;height:40px;border-radius:8px;font-size:20px;cursor:pointer}
+@media(min-width:820px){.menu-btn{display:none}}
+.mobile-menu{
+  display:none;flex-direction:column;gap:4px;padding:12px 24px 20px;
+  background:var(--deep);border-bottom:1px solid rgba(124,227,236,.14);
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:#cfe4ee;padding:10px 4px;border-bottom:1px solid rgba(124,227,236,.08);font-size:14.5px}
+.mobile-menu a:last-child{border-bottom:none}
 
-    body {
-      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
+/* ===== Hero ===== */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;
+  background:
+    radial-gradient(1000px 600px at 82% 12%, rgba(39,199,214,.22), transparent 60%),
+    radial-gradient(800px 520px at 8% 88%, rgba(255,154,107,.16), transparent 60%),
+    linear-gradient(160deg, #071728 0%, #0b1e31 45%, #0e2a44 100%);
+  color:#eaf4f9;
+  overflow:hidden;
+  padding:110px 0 70px;
+}
+.hero-canvas{position:absolute;inset:0;z-index:0}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;letter-spacing:.18em;color:var(--cyan-soft);
+  border:1px solid rgba(124,227,236,.28);border-radius:999px;
+  padding:7px 16px;margin-bottom:26px;background:rgba(39,199,214,.06);
+}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.hero h1{
+  font-size:clamp(30px,5.6vw,58px);
+  font-weight:900;line-height:1.18;letter-spacing:.01em;
+  max-width:16em;
+}
+.hero h1 .accent{color:var(--cyan-soft)}
+.hero .sub{
+  margin-top:26px;max-width:620px;color:#a9c4d4;
+  font-size:clamp(15px,2vw,18px);font-weight:300;line-height:1.9;
+}
+.hero .theme{
+  margin-top:30px;display:flex;flex-wrap:wrap;gap:10px;
+}
+.hero .theme span{
+  font-size:12.5px;color:#c9e2ee;background:rgba(255,255,255,.06);
+  border:1px solid rgba(124,227,236,.2);padding:6px 14px;border-radius:999px;
+}
+.hero-meta{
+  margin-top:44px;display:flex;flex-wrap:wrap;gap:34px;align-items:center;
+}
+.hstat{display:flex;flex-direction:column}
+.hstat b{font-family:"Noto Serif SC",serif;font-size:30px;color:#fff;line-height:1.1}
+.hstat i{font-style:normal;font-size:12.5px;color:#8fb0c2;margin-top:4px}
+.scroll-hint{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;
+  color:#7fa3b6;font-size:12px;letter-spacing:.16em;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-hint .line{width:1px;height:40px;background:linear-gradient(var(--cyan-soft),transparent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-    /* Navigation */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-      padding: 0.8rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* ===== 章节通用 ===== */
+.chap{padding:88px 0}
+.chap-alt{background:#eef5f8}
+.chap .kicker{font-size:13px;letter-spacing:.2em;color:#2a9cab;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.chap .kicker::before{content:"";width:22px;height:1.5px;background:#2a9cab}
+.chap h2{font-size:clamp(24px,3.4vw,36px);font-weight:900;line-height:1.3;letter-spacing:.01em}
+.chap h2 .num{color:#27c7d6;font-family:"Noto Serif SC",serif;margin-right:8px}
+.lede{margin-top:16px;max-width:760px;color:var(--ink-soft);font-size:15.5px}
+.chap-head{max-width:860px}
 
-    .nav-logo {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+/* ===== 趋势 ===== */
+.trend-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:44px}
+@media(min-width:760px){.trend-grid{grid-template-columns:1fr 1fr}}
+.trend-card{
+  background:var(--card);border-radius:18px;padding:26px 26px 24px;
+  border:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;
+}
+.trend-card::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--cyan)}
+.trend-card:nth-child(3)::after,.trend-card:nth-child(4)::after{background:var(--coral)}
+.trend-card h3{font-size:17.5px;font-weight:700;display:flex;align-items:center;gap:10px}
+.trend-card h3 .ico{width:34px;height:34px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(39,199,214,.1);color:#12899a}
+.trend-card:nth-child(3) h3 .ico,.trend-card:nth-child(4) h3 .ico{background:rgba(255,154,107,.14);color:#d97a43}
+.trend-card p{font-size:14px;color:var(--ink-soft)}
+.trend-card .tag{font-size:12px;color:#2a9cab;background:rgba(39,199,214,.08);border-radius:6px;padding:3px 10px;align-self:flex-start;font-weight:500}
+.trend-note{margin-top:22px;font-size:13px;color:var(--muted);background:rgba(39,199,214,.05);border-left:3px solid var(--cyan);padding:12px 16px;border-radius:0 10px 10px 0}
 
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
+/* ===== 问题分解 ===== */
+.decomp{display:grid;grid-template-columns:1fr;gap:40px;margin-top:44px;align-items:start}
+@media(min-width:900px){.decomp{grid-template-columns:1.05fr .95fr}}
+.decomp-chart{background:var(--card);border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:12px;min-height:420px}
+#decompChart{width:100%;height:420px}
+.dim-list{display:flex;flex-direction:column;gap:14px}
+.dim{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;
+  box-shadow:var(--shadow);position:relative;
+}
+.dim .dim-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.dim .dim-badge{width:30px;height:30px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff}
+.dim:nth-child(1) .dim-badge{background:#27c7d6}
+.dim:nth-child(2) .dim-badge{background:#ff9a6b}
+.dim:nth-child(3) .dim-badge{background:#6aa5e8}
+.dim h4{font-size:16px;font-weight:700}
+.dim p{font-size:13.5px;color:var(--ink-soft);margin-bottom:8px}
+.dim .pins{display:flex;flex-wrap:wrap;gap:6px}
+.dim .pins span{font-size:11.5px;color:#34506b;background:#eef6f8;border-radius:6px;padding:3px 9px}
 
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
+/* ===== 用户与痛点 ===== */
+.users{display:grid;grid-template-columns:1fr;gap:18px;margin-top:44px}
+@media(min-width:760px){.users{grid-template-columns:1fr 1fr 1fr}}
+.user{
+  background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
+}
+.user .u-img{height:180px;overflow:hidden;position:relative}
+.user .u-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.user:hover .u-img img{transform:scale(1.05)}
+.user .u-body{padding:20px 22px 22px}
+.user .u-tag{display:inline-block;font-size:11.5px;letter-spacing:.08em;color:#fff;border-radius:6px;padding:3px 10px;margin-bottom:10px}
+.user h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.user .u-desc{font-size:13px;color:var(--muted);margin-bottom:12px}
+.user ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.user li{font-size:13.5px;color:var(--ink-soft);padding-left:18px;position:relative}
+.user li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;transform:rotate(45deg)}
+.u-coral li::before{background:var(--coral)}
+.u-cyan li::before{background:var(--cyan)}
+.u-blue li::before{background:#6aa5e8}
 
-    .nav-links a:hover {
-      color: var(--primary);
-    }
+/* ===== 解决方案 ===== */
+.sol-intro{margin-top:30px;background:linear-gradient(135deg,#0e2a44,#0b1e31);color:#e6f1f6;border-radius:20px;padding:34px 30px;position:relative;overflow:hidden}
+.sol-intro::before{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(39,199,214,.25),transparent 70%)}
+.sol-intro h3{font-size:21px;font-weight:700;margin-bottom:14px}
+.sol-intro p{font-size:14.5px;color:#c3d9e6;max-width:720px}
+.sol-intro .pill{display:inline-block;margin-top:18px;font-size:12.5px;color:#08182a;background:var(--cyan-soft);border-radius:999px;padding:7px 16px;font-weight:600}
+.sol-map{margin-top:40px;display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:820px){.sol-map{grid-template-columns:1fr 1fr}}
+.sol-block{
+  background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);padding:24px;
+}
+.sol-block h4{font-size:16.5px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:9px;color:#0e2a44}
+.sol-block h4 .ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(39,199,214,.12);color:#12899a;flex:none}
+.fmap{display:flex;flex-direction:column;gap:12px}
+.frow{border-left:2px solid #d8ecf2;padding-left:16px;position:relative}
+.frow::before{content:"";position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--cyan)}
+.frow .f-pain{font-size:12px;color:var(--muted)}
+.frow .f-sol{font-size:14px;color:var(--ink);font-weight:500;margin-top:2px}
 
-    /* Hero */
-    .hero {
-      margin-top: 60px;
-      background: var(--gradient);
-      color: white;
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+/* ===== 流程 ===== */
+.flow-wrap{margin-top:44px;position:relative}
+.flow-line{
+  position:absolute;left:22px;top:14px;bottom:14px;width:2px;
+  background:linear-gradient(var(--cyan),#aee8ef 40%,#ffc9a8);
+}
+@media(min-width:760px){.flow-line{left:50%;transform:translateX(-50%)}}
+.flow-item{position:relative;padding-left:60px;margin-bottom:26px;min-height:64px}
+@media(min-width:760px){.flow-item{padding-left:0;width:50%;margin-bottom:34px}}
+@media(min-width:760px){
+  .flow-item:nth-child(odd){padding-right:52px;text-align:right}
+  .flow-item:nth-child(even){margin-left:50%;padding-left:52px;text-align:left}
+}
+.flow-dot{
+  position:absolute;left:16px;top:10px;width:13px;height:13px;border-radius:50%;
+  background:#fff;border:3px solid var(--cyan);box-shadow:0 0 0 4px rgba(39,199,214,.18);z-index:2;
+}
+@media(min-width:760px){.flow-dot{left:auto;right:auto;top:12px}}
+@media(min-width:760px){.flow-item:nth-child(odd) .flow-dot{left:calc(100% - 6px)}}
+@media(min-width:760px){.flow-item:nth-child(even) .flow-dot{left:-7px}}
+.flow-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);display:inline-block;max-width:100%}
+.flow-item:nth-child(even) .flow-card{text-align:left}
+.flow-card b{display:block;font-size:15px;margin-bottom:4px;color:#0e2a44}
+.flow-card span{font-size:13px;color:var(--ink-soft)}
+.flow-item .stepno{font-size:11.5px;color:#2a9cab;font-weight:700;letter-spacing:.1em;margin-bottom:2px;display:block}
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-      animation: pulse 15s infinite linear;
-    }
+/* ===== 案例证据 ===== */
+.case-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:44px}
+@media(min-width:820px){.case-grid{grid-template-columns:1fr 1fr}}
+.case{background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);padding:26px;position:relative;overflow:hidden}
+.case .c-tag{font-size:11.5px;letter-spacing:.1em;color:#fff;border-radius:6px;padding:3px 10px;display:inline-block;margin-bottom:14px}
+.case h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.case .c-role{font-size:13px;color:var(--muted);margin-bottom:14px}
+.case ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.case li{font-size:13.5px;color:var(--ink-soft);padding-left:16px;position:relative}
+.case li::before{content:"·";position:absolute;left:2px;font-weight:700;color:#2a9cab}
+.evidence{display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px}
+@media(min-width:760px){.evidence{grid-template-columns:1fr 1fr 1fr}}
+.ev{
+  background:#eef5f8;border:1px solid var(--line);border-radius:14px;padding:20px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.ev .ev-k{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.ev .ev-v{font-size:15px;font-weight:600;color:#0e2a44}
+.ev .ev-note{font-size:12px;color:var(--muted)}
 
-    @keyframes pulse {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+/* ===== 影响 ===== */
+.impact{margin-top:44px}
+.impact .lead{
+  font-size:clamp(18px,2.6vw,24px);line-height:1.7;font-family:"Noto Serif SC",serif;
+  color:#0e2a44;max-width:860px;font-weight:500;
+}
+.impact-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:36px}
+@media(min-width:760px){.impact-grid{grid-template-columns:1fr 1fr 1fr}}
+.impact-card{background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);padding:24px}
+.impact-card h4{font-size:16px;font-weight:700;margin-bottom:10px;color:#0e2a44}
+.impact-card p{font-size:13.5px;color:var(--ink-soft)}
 
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+/* ===== 结语 CTA ===== */
+.closing{
+  background:linear-gradient(160deg,#0b1e31,#0e2a44);color:#eaf4f9;
+  padding:80px 0;text-align:center;position:relative;overflow:hidden;
+}
+.closing::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 300px at 50% 0%,rgba(39,199,214,.18),transparent 65%)}
+.closing .wrap{position:relative;z-index:2}
+.closing h2{font-size:clamp(24px,3.4vw,36px);font-weight:900;max-width:14em;margin:0 auto}
+.closing .sub{color:#a9c4d4;max-width:640px;margin:18px auto 0;font-size:15px}
+.closing .cta-row{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:999px;font-size:14.5px;font-weight:600;cursor:pointer;border:none;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--cyan);color:#06222b}
+.btn-primary:hover{box-shadow:0 8px 26px rgba(39,199,214,.4)}
+.btn-ghost{background:transparent;color:#d8ecf4;border:1px solid rgba(124,227,236,.4)}
+.btn-ghost:hover{background:rgba(39,199,214,.08)}
 
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-      backdrop-filter: blur(4px);
-    }
+/* ===== 页脚 ===== */
+footer{background:#071728;color:#7fa3b6;padding:40px 0;font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+footer .f-brand{color:#cfe4ee;font-weight:600}
+footer span{line-height:1.8}
 
-    .hero h1 {
-      font-size: 2.6rem;
-      font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.5px;
-    }
+/* ===== 动效 ===== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.scroll-hint .line{animation:none}}
 
-    .hero-subtitle {
-      font-size: 1.2rem;
-      opacity: 0.95;
-      max-width: 700px;
-      margin: 0 auto 2rem;
-      font-weight: 300;
-    }
+/* ===== 模式识别 ===== */
+.pattern-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:44px}
+@media(min-width:760px){.pattern-grid{grid-template-columns:1fr 1fr}}
+.pat{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow);overflow:hidden;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+.pat:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(14,42,68,.16)}
+.pat.expanded{border-color:var(--cyan)}
+.pat-head{display:flex;align-items:flex-start;gap:14px;padding:20px 22px 16px}
+.pat-no{font-family:"Noto Serif SC",serif;font-size:15px;font-weight:700;color:#fff;background:var(--cyan);border-radius:9px;width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center}
+.pat:nth-child(2) .pat-no,.pat:nth-child(4) .pat-no{background:var(--coral)}
+.pat h4{font-size:16.5px;font-weight:700;line-height:1.4;margin-top:1px}
+.pat-head .chev{margin-left:auto;color:var(--muted);flex:none;transition:transform .3s;font-size:12px;margin-top:6px}
+.pat.expanded .chev{transform:rotate(180deg)}
+.pat-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.pat.expanded .pat-body{max-height:220px}
+.pat-body p{padding:0 22px 20px;font-size:13.5px;color:var(--ink-soft)}
+.pat .pat-brief{font-size:13px;color:var(--muted);padding:0 22px 18px}
 
-    .hero-meta {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
+/* ===== 传统 vs AR 对比 ===== */
+.compare{margin-top:44px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.cmp-tabs{display:flex;border-bottom:1px solid var(--line);background:#eef5f8}
+.cmp-tab{
+  flex:1;padding:16px 14px;text-align:center;cursor:pointer;border:none;background:none;
+  font-size:14.5px;font-weight:600;color:var(--muted);position:relative;transition:color .2s;
+}
+.cmp-tab.active{color:var(--ink)}
+.cmp-tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--cyan)}
+.cmp-tab.active.alt::after{background:var(--coral)}
+.cmp-panel{display:none;padding:10px}
+.cmp-panel.active{display:block}
+.cmp-panel table{width:100%;border-collapse:collapse;font-size:14px}
+.cmp-panel th,.cmp-panel td{padding:13px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.cmp-panel th{font-weight:600;color:#0e2a44;white-space:nowrap;width:24%}
+.cmp-panel tr:last-child td,.cmp-panel tr:last-child th{border-bottom:none}
+.cmp-trad td{color:var(--ink-soft)}
+.cmp-ar{background:#f2fbfc}
+.cmp-panel td b{color:#12899a}
 
-    /* Section common */
-    section {
-      padding: 4rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+/* ===== 时间线 ===== */
+.tl-wrap{margin-top:44px}
+.tl{display:grid;grid-template-columns:1fr;gap:0;position:relative}
+@media(min-width:760px){.tl{grid-template-columns:1fr 1fr 1fr}}
+.tl .tl-col{position:relative;padding:0 0 10px}
+.tl-col .tl-mid{position:relative;padding-bottom:26px}
+.tl-col::before{content:"";position:absolute;top:0;bottom:0;left:8px;width:2px;background:var(--line)}
+@media(min-width:760px){
+  .tl-col::before{left:50%;transform:translateX(-50%)}
+  .tl-col:first-child::before{background:linear-gradient(var(--cyan),#aee8ef)}
+  .tl-col:nth-child(2)::before{background:linear-gradient(#aee8ef,#ffd3b6)}
+  .tl-col:last-child::before{background:linear-gradient(#ffd3b6,var(--coral))}
+}
+.tl-num{
+  position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;
+  background:#fff;border:3px solid var(--cyan);z-index:2;
+}
+@media(min-width:760px){.tl-num{left:50%;transform:translateX(-50%)}}
+.tl-col:nth-child(2) .tl-num{border-color:var(--coral)}
+.tl-col:nth-child(3) .tl-num{border-color:var(--coral)}
+.tl-card{margin:34px 0 0 34px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+@media(min-width:760px){.tl-card{margin:44px 0 0;text-align:center}}
+.tl-card .tl-label{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:#fff;border-radius:6px;padding:3px 11px;margin-bottom:10px}
+.tl-col:first-child .tl-label{background:var(--cyan)}
+.tl-col:nth-child(2) .tl-label{background:var(--coral)}
+.tl-col:last-child .tl-label{background:var(--coral)}
+.tl-card p{font-size:13.5px;color:var(--ink-soft)}
+.tl-card .tl-range{font-size:12px;color:var(--muted);margin-top:8px;font-weight:500}
 
-    .section-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
+/* ===== KPI ===== */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px}
+@media(min-width:760px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+.kpi{
+  background:linear-gradient(160deg,#0e2a44,#0b1e31);color:#eaf4f9;
+  border-radius:16px;padding:26px 20px;text-align:center;position:relative;overflow:hidden;
+}
+.kpi::before{content:"";position:absolute;right:-30px;top:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(39,199,214,.25),transparent 70%)}
+.kpi .value{font-family:"Noto Serif SC",serif;font-size:clamp(24px,3vw,34px);font-weight:900;color:var(--cyan-soft);line-height:1.1;display:flex;align-items:baseline;justify-content:center;gap:2px}
+.kpi:nth-child(2) .value{color:var(--coral-soft)}
+.kpi:nth-child(3) .value{color:var(--cyan-soft)}
+.kpi:nth-child(4) .value{color:var(--coral-soft)}
+.kpi .unit{font-size:15px;font-weight:600}
+.kpi .label{font-size:12.5px;color:#a9c4d4;margin-top:8px;line-height:1.5}
 
-    .section-header h2 {
-      font-size: 1.9rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      color: var(--text);
-    }
+/* ===== 参考文献 ===== */
+.refs-wrap{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:26px 28px}
+.refs-wrap h4{font-size:15px;font-weight:700;color:#0e2a44;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.refs-wrap h4 .ico{color:#2a9cab}
+.refs-wrap ol{padding-left:20px;display:flex;flex-direction:column;gap:9px}
+.refs-wrap li{font-size:13px;color:var(--ink-soft);line-height:1.7}
+.refs-note{margin-top:16px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
 
-    .section-header p {
-      color: var(--text-light);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .section-tag {
-      display: inline-block;
-      background: #e0f2fe;
-      color: var(--primary);
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.3rem 0.8rem;
-      border-radius: 6px;
-      margin-bottom: 0.8rem;
-    }
-
-    /* Cards */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 1.8rem;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px -15px rgba(0,0,0,0.12);
-    }
-
-    .card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .card p {
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
-
-    /* Timeline / Process */
-    .process-flow {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-
-    .process-step {
-      background: white;
-      border-radius: 12px;
-      padding: 1.2rem 1.5rem;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      text-align: center;
-      min-width: 140px;
-      position: relative;
-    }
-
-    .process-step .num {
-      width: 32px;
-      height: 32px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      margin: 0 auto 0.6rem;
-      font-size: 0.9rem;
-    }
-
-    /* Comparison */
-    .compare-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    @media (max-width: 700px) {
-      .compare-grid { grid-template-columns: 1fr; }
-    }
-
-    .compare-box {
-      border-radius: 16px;
-      padding: 1.8rem;
-    }
-
-    .compare-before {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-    }
-
-    .compare-after {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-    }
-
-    .compare-box h4 {
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .compare-box ul {
-      padding-left: 1.2rem;
-      color: var(--text);
-    }
-
-    .compare-box li {
-      margin-bottom: 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    /* Highlight box */
-    .highlight-box {
-      background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid #bfdbfe;
-      margin: 2rem 0;
-    }
-
-    /* Team */
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
-    }
-
-    .team-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .team-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: var(--gradient);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin: 0 auto 0.8rem;
-    }
-
-    /* Footer */
-    footer {
-      background: #0f172a;
-      color: #94a3b8;
-      text-align: center;
-      padding: 2.5rem 2rem;
-      margin-top: 3rem;
-      font-size: 0.9rem;
-    }
-
-    footer strong {
-      color: white;
-    }
-
-    /* Utility */
-    .text-center { text-align: center; }
-    .mt-2 { margin-top: 2rem; }
-    .mb-1 { margin-bottom: 1rem; }
-
-    /* Responsive nav */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hero h1 { font-size: 1.9rem; }
-      section { padding: 3rem 1.2rem; }
-    }
-
-    /* Smooth scroll */
-    html { scroll-behavior: smooth; }
-
-    /* Table */
-    .simple-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .simple-table th,
-    .simple-table td {
-      padding: 1rem 1.2rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .simple-table th {
-      background: #f1f5f9;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .simple-table tr:last-child td {
-      border-bottom: none;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav>
-    <div class="nav-logo">
-      <span>🔬</span> AR × Future of Work
-    </div>
-    <ul class="nav-links">
-      <li><a href="#trend">趋势背景</a></li>
-      <li><a href="#decompose">问题分解</a></li>
-      <li><a href="#case">案例分析</a></li>
-      <li><a href="#solution">战略建议</a></li>
-      <li><a href="#team">团队</a></li>
-    </ul>
-  </nav>
 
-  <!-- Hero -->
-  <header class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">香港教育大学 · INT6140 工作与人力的未来趋势</div>
-      <h1>增强现实（AR）重塑儿科术前宣教工作</h1>
-      <p class="hero-subtitle">
-        技术如何改变医护的工作内容、技能需求与福祉？<br>
-        从高重复口头劳动到标准化数字协同的转型路径
-      </p>
-      <div class="hero-meta">
-        <span>📌 小组项目展示</span>
-        <span>📅 2026</span>
-        <span>🎯 对应 CILO 1 · 2 · 4</span>
+<!-- ===== 顶部导航 ===== -->
+<nav class="topnav" id="topnav">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#0e3a5f" stroke="#27c7d6" stroke-width="2"/><path d="M20 32a12 12 0 0 1 24 0M20 32a12 12 0 0 0 24 0M32 20v24" stroke="#40d6e0" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="32" r="4" fill="#ffb36b"/></svg>
+      <span>AR 术前可视化宣教 · 未来工作研究</span>
+    </div>
+    <div class="navlinks">
+      <a href="#trend">趋势</a>
+      <a href="#decomp">问题分解</a>
+      <a href="#pattern">模式识别</a>
+      <a href="#users">目标用户</a>
+      <a href="#solution">解决方案</a>
+      <a href="#compare">对比</a>
+      <a href="#timeline">落地</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="菜单" aria-expanded="false"><svg id="menuIco" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#trend">趋势背景</a>
+    <a href="#decomp">问题分解</a>
+    <a href="#pattern">模式识别</a>
+    <a href="#users">目标用户</a>
+    <a href="#solution">解决方案</a>
+    <a href="#compare">传统 vs AR 对比</a>
+    <a href="#timeline">实施时间线</a>
+    <a href="#kpi">预期效果</a>
+    <a href="#refs">参考文献</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="top">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="wrap">
+    <div class="eyebrow reveal in"><span class="dot"></span>INT6140 · 工作与人力的未来趋势</div>
+    <h1 class="reveal in">AR 儿童术前<span class="accent">可视化宣教</span>系统<br>让严肃的术前告知，成为孩子看得懂的陪伴</h1>
+    <p class="sub reveal in">以增强现实（AR）三维交互，把手术结构与流程直观呈现给患儿与家长——降低理解门槛、缓解术前焦虑，同时把医护从重复宣教中解放出来。这是一次关于"数字技术如何重塑临床岗位与医患沟通"的未来工作研究。</p>
+    <div class="theme reveal in">
+      <span>XR 重塑临床工作方式</span>
+      <span>患儿 · 家长 · 医护三方</span>
+      <span>从痛点拆解到可落地方案</span>
+      <span>需求与场景分析</span>
+    </div>
+    <div class="hero-meta reveal in">
+      <div class="hstat"><b>3 方</b><i>核心利益相关者</i></div>
+      <div class="hstat"><b>3 维</b><i>问题分解视角</i></div>
+      <div class="hstat"><b>6 步</b><i>术前宣教完整流程</i></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>向下滚动探索</span><span class="line"></span></div>
+</header>
+<!-- ===== Hero 完 ===== -->
+
+<!-- ===== 趋势背景 ===== -->
+<section class="chap" id="trend">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">TREND · 趋势背景</div>
+      <h2><span class="num">01</span>为什么这是一个"未来工作"问题</h2>
+      <p class="lede">儿科术前宣教正面临人力负担与体验质量的双重挑战：医疗人力长期紧张，而宣教高度依赖医护重复讲解。增强现实（XR）正在成为重塑这类临床岗位工作方式的典型样本——它同时回应了员工福祉（CILO2）与技术驱动的岗位变革（CILO1）。</p>
+    </div>
+    <div class="trend-grid">
+      <div class="trend-card reveal">
+        <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg></span>重复性宣教 · 医护时间被占用</h3>
+        <span class="tag">劳动力负担</span>
+        <p>面对不同家庭，医护需要反复口头讲解同样的手术信息。耗时久、标准化程度低，且难以判断患儿与家长是否真正理解——这是典型的"高重复、低杠杆"岗位环节。</p>
+      </div>
+      <div class="trend-card reveal">
+        <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18" stroke-linecap="round"/></svg></span>信息抽象 · 儿童难以理解医学知识</h3>
+        <span class="tag">医患沟通</span>
+        <p>纸质图文、静态解剖图、普通视频对儿童而言过于抽象，容易放大对手术、打针、手术室环境的恐惧与焦虑；家长也容易遗漏术前禁食、护理、风险等关键信息。</p>
+      </div>
+      <div class="trend-card reveal">
+        <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke-linecap="round"/></svg></span>XR 可视化 · 把抽象变直观</h3>
+        <span class="tag">技术机遇</span>
+        <p>增强现实能以三维交互方式呈现手术结构与流程，把看不见的人体内部"具象化"，显著降低理解门槛——这正是数字技术改变医学沟通的切入点。</p>
+      </div>
+      <div class="trend-card reveal">
+        <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z"/></svg></span>高敏感人群 · 家长群体的特殊性</h3>
+        <span class="tag">人文关怀</span>
+        <p>对应儿童手术的家长是最谨慎、关注度最高的群体：心疼孩子、惧怕风险、反复核对信息。技术方案必须同时服务"理性核实"与"情感安抚"两种需求。</p>
       </div>
     </div>
-  </header>
+    <p class="trend-note reveal">核心主张：本项目不以替代医生诊断和告知为目标，而是<b>辅助术前宣教</b>——用 AR 可视化降低医学信息理解门槛，安抚儿童情绪，给家长严谨、清晰、可复核的内容，同时提升医护效率。</p>
+  </div>
+</section>
 
-  <!-- 趋势背景 -->
-  <section id="trend">
-    <div class="section-header">
-      <div class="section-tag">CILO1 · 技术重塑产业</div>
-      <h2>为什么关注这个趋势？</h2>
-      <p>儿科术前宣教是典型的高情绪劳动、高重复性知识工作。AR的介入正在重塑这一工作本身。</p>
+<!-- ===== 问题分解 ===== -->
+<section class="chap chap-alt" id="decomp">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">DECOMPOSITION · 问题分解</div>
+      <h2><span class="num">02</span>把"宣教难"拆成三个可解的维度</h2>
+      <p class="lede">传统宣教的困境并非单一问题，而是三条相互交织的线索。我们把整体问题分解为三个维度，每个维度对应一组明确的痛点与解决思路——这正是报告评估中"问题分解与模式识别"的核心。</p>
     </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon" style="background:#dbeafe;">😰</div>
-        <h3>传统工作痛点</h3>
-        <p>医护需对每个家庭重复讲解手术结构、流程、禁食护理等。内容标准化低，效果难量化，占用大量门诊/病房时间，同时儿童与家长焦虑高企。</p>
+    <div class="decomp">
+      <div class="decomp-chart reveal">
+        <div id="decompChart" role="img" aria-label="问题分解结构图"></div>
       </div>
-      <div class="card">
-        <div class="card-icon" style="background:#dcfce7;">📱</div>
-        <h3>技术介入机会</h3>
-        <p>AR通过三维可视化与交互，把抽象医学信息变成儿童可理解、家长可复核的体验。已有多项RCT证明其能显著降低术前焦虑。</p>
-      </div>
-      <div class="card">
-        <div class="card-icon" style="background:#fef3c7;">🔄</div>
-        <h3>对「工作」的本质改变</h3>
-        <p>从「一对一重复口头传递」转向「标准化数字内容 + 医护引导答疑」。时间结构、技能要求、职业体验同步变化。</p>
-      </div>
-    </div>
-
-    <div class="highlight-box mt-2">
-      <strong>核心洞察：</strong> 这不是单纯的「患者教育工具」，而是<strong>知识型服务工作数字化</strong>的典型案例——技术把高变异、高情绪成本的劳动转化为可复制、可量化、低重复的新工作模式。
-    </div>
-  </section>
-
-  <!-- 问题分解 -->
-  <section id="decompose" style="background:#f1f5f9; max-width:100%; padding-left:0; padding-right:0;">
-    <div style="max-width:1100px; margin:0 auto; padding:0 2rem;">
-      <div class="section-header">
-        <div class="section-tag">Decomposition & Pattern Recognition</div>
-        <h2>问题分解与模式识别</h2>
-        <p>将「AR进入术前宣教」拆解为对人力与工作的多维影响</p>
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-icon" style="background:#ede9fe;">⏱️</div>
-          <h3>1. 工作流程与时间结构</h3>
-          <p>重复宣教时间被压缩；医护从「主讲人」变为「引导者 + 答疑者」。标准化内容释放出可用于复杂病例沟通的时间。</p>
+      <div class="dim-list">
+        <div class="dim reveal">
+          <div class="dim-head"><span class="dim-badge">一</span><h4>儿童：认知与情绪</h4></div>
+          <p>注意力短、害怕陌生医疗场景、看不懂专业图纸，对图像、动画、互动接受度更高。</p>
+          <div class="pins"><span>注意力短</span><span>害怕陌生场景</span><span>看不懂图纸</span><span>偏好互动形式</span></div>
         </div>
-        <div class="card">
-          <div class="card-icon" style="background:#fce7f3;">🧠</div>
-          <h3>2. 技能需求重塑</h3>
-          <p>新增：数字素养、AR内容审核、儿童友好交互引导、效果评估能力。传统「讲解技巧」部分被技术替代，共情与判断力反而更重要。</p>
+        <div class="dim reveal">
+          <div class="dim-head"><span class="dim-badge">二</span><h4>家长：信息与信任</h4></div>
+          <p>高谨慎、高敏感，对信息准确度要求极高；医学名词难懂，担心孩子持续恐惧，需要可回看的高可信材料。</p>
+          <div class="pins"><span>高度谨慎</span><span>术语难懂</span><span>需反复核对</span><span>担心孩子恐惧</span></div>
         </div>
-        <div class="card">
-          <div class="card-icon" style="background:#ccfbf1;">💚</div>
-          <h3>3. 员工福祉与体验</h3>
-          <p>减少情绪耗竭与「说了千遍」的疲劳；提升工作意义感与患者信任反馈。工作场所从纯线下沟通转向人机协同。</p>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="background:#ffedd5;">👥</div>
-          <h3>4. 角色与岗位演变</h3>
-          <p>可能出现「医疗内容设计师」「AR宣教协调员」等新角色；护士/主治医的职责边界发生微调，跨学科协作增强。</p>
+        <div class="dim reveal">
+          <div class="dim-head"><span class="dim-badge">三</span><h4>医护：效率与量化</h4></div>
+          <p>门诊、病房工作量大，需要标准化、快速、可复用的宣教工具；宣教效果难以量化，无法判断是否真正听懂。</p>
+          <div class="pins"><span>工作量大</span><span>需标准化</span><span>效果难量化</span><span>可复用工具</span></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="mt-2">
-        <h3 class="mb-1" style="text-align:center;">识别出的核心模式</h3>
-        <table class="simple-table">
-          <thead>
-            <tr>
-              <th>维度</th>
-              <th>传统模式</th>
-              <th>AR介入后模式</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>劳动性质</td>
-              <td>高重复口头劳动</td>
-              <td>标准化数字内容 + 高价值人工引导</td>
-            </tr>
-            <tr>
-              <td>技能重心</td>
-              <td>医学知识表达与耐心</td>
-              <td>数字工具使用 + 共情判断 + 内容把控</td>
-            </tr>
-            <tr>
-              <td>效果衡量</td>
-              <td>主观感受，难以量化</td>
-              <td>可记录交互数据、理解度反馈</td>
-            </tr>
-            <tr>
-              <td>时间价值</td>
-              <td>大量时间消耗在基础讲解</td>
-              <td>基础内容自助，时间转向复杂沟通</td>
-            </tr>
-          </tbody>
+<!-- ===== 模式识别 ===== -->
+<section class="chap chap-alt" id="pattern">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">PATTERN · 模式识别</div>
+      <h2><span class="num">03</span>从现象里提炼可复用的影响模式</h2>
+      <p class="lede">把个案与文献中的现象抽象成四条"技术影响工作"的通用模式——它们既是本项目的论证框架，也是报告评估中"模式识别"的直接体现。<b>点击卡片展开细节。</b></p>
+    </div>
+    <div class="pattern-grid">
+      <div class="pat reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="pat-head"><span class="pat-no">一</span><h4>重复性任务被标准化工具替代</h4><span class="chev">▼</span></div>
+        <p class="pat-brief">口头重复讲解、基础结构说明等可被 AR 内容"固化"。</p>
+        <div class="pat-body"><p>医护时间从"信息传递"转向"个性化答疑与情感支持"。单次宣教中的标准化部分交给系统，人的精力集中到机器做不了的判断与安抚上——这是技术解放人力的典型机制。</p></div>
+      </div>
+      <div class="pat reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="pat-head"><span class="pat-no">二</span><h4>情绪劳动强度被重新分配</h4><span class="chev">▼</span></div>
+        <p class="pat-brief">儿童焦虑降低、家长情绪稳定 → 医护安抚压力下降。</p>
+        <div class="pat-body"><p>可视化把"看不懂的恐惧"转化为"看得懂的预期"，直接降低医患双方的紧张。技术成为情绪劳动的"缓冲层"，改善医护情绪耗竭与职业倦怠风险。</p></div>
+      </div>
+      <div class="pat reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="pat-head"><span class="pat-no">三</span><h4>技能结构向"人机协作"迁移</h4><span class="chev">▼</span></div>
+        <p class="pat-brief">基础讲解技能需求下降，新技能与岗位涌现。</p>
+        <div class="pat-body"><p>设备操作、内容解读、异常处理与数据反馈利用等技能需求上升，可能出现"医疗 AR 内容专员""宣教数字化协调员"等辅助岗位；现有护士需接受 AR 操作与引导话术培训。</p></div>
+      </div>
+      <div class="pat reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="pat-head"><span class="pat-no">四</span><h4>信任机制从"人"转向"人＋可复核媒介"</h4><span class="chev">▼</span></div>
+        <p class="pat-brief">高度谨慎的家长需要可回看、权威的材料。</p>
+        <div class="pat-body"><p>AR 提供标准化、可审计的信息源，让家长可反复核对。技术不削弱医患信任，反而通过"可复核"强化信任——这是本项目服务高敏感家长群体的关键逻辑。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 目标用户与痛点 ===== -->
+<section class="chap" id="users">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">PERSONAS · 目标用户与痛点</div>
+      <h2><span class="num">04</span>三类用户，三组不同的"未被满足的需求"</h2>
+      <p class="lede">我们以"需求与场景分析"的方法，逐一梳理核心用户与次要用户的特征、痛点与需求，并转化为产品设计输入。</p>
+    </div>
+    <div class="users">
+      <div class="user reveal">
+        <div class="u-img"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/HiOfbh5mmoOp2Rx0GoicF353nXg" alt="患儿在病房用平板查看AR人体模型" loading="lazy"></div>
+        <div class="u-body u-cyan">
+          <span class="u-tag" style="background:#27c7d6">核心用户</span>
+          <h3>待手术的儿童患者</h3>
+          <p class="u-desc">看不懂专业医学图纸，对陌生医疗环境有本能恐惧。</p>
+          <ul>
+            <li>看到冰冷器械、手术室图片容易紧张害怕</li>
+            <li>二维图文难以理解身体内部结构</li>
+            <li>传统宣教枯燥，容易抗拒宣教过程</li>
+          </ul>
+        </div>
+      </div>
+      <div class="user reveal">
+        <div class="u-img"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/YNTtbpRB1ooBrbxxKI1cANVZnhh" alt="妈妈和患儿一起在诊室观看AR心脏全息模型" loading="lazy"></div>
+        <div class="u-body u-coral">
+          <span class="u-tag" style="background:#ff9a6b">核心用户</span>
+          <h3>患儿家长</h3>
+          <p class="u-desc">高敏感、高谨慎的决策群体，情绪焦虑，高度重视手术安全。</p>
+          <ul>
+            <li>信息准确度要求高，医生讲解快、易记混遗漏</li>
+            <li>专业名词难懂，难用通俗语言向孩子解释</li>
+            <li>缺少可反复查看、可信度高的宣教材料</li>
+          </ul>
+        </div>
+      </div>
+      <div class="user reveal">
+        <div class="u-img"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Ff3HbsEgFo9w4Cxb65mc3Pfrnof" alt="护士向家长展示AR手术流程动画" loading="lazy"></div>
+        <div class="u-body u-blue">
+          <span class="u-tag" style="background:#6aa5e8">次要用户</span>
+          <h3>儿科医生与护士</h3>
+          <p class="u-desc">门诊、病房工作量大，需要标准化、快速、可复用的宣教工具。</p>
+          <ul>
+            <li>每位患者都要重复讲解，占用大量诊疗时间</li>
+            <li>宣教效果无法量化，不确定是否听懂</li>
+            <li>缺少兼顾趣味性与专业性的儿童宣教载体</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 解决方案 ===== -->
+<section class="chap chap-alt" id="solution">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">SOLUTION · 解决方案</div>
+      <h2><span class="num">05</span>AR 系统：把每个痛点翻译成一个功能</h2>
+      <p class="lede">解决方案设计遵循"一个功能对应一组痛点"的原则，确保每条设计都能追溯到明确的需求来源，具备可操作性与可评估性。</p>
+    </div>
+    <div class="sol-intro reveal">
+      <h3>设计主张</h3>
+      <p>本 AR 系统的核心目标不是替代医生诊断和告知，而是<b style="color:#7ce3ec">辅助术前宣教</b>。优先保证内容安全合规、交互简单友好，适配儿童患者及家属使用——用可视化降低理解门槛，用标准化提升医护效率。</p>
+      <span class="pill">核心：不是替代，而是辅助</span>
+    </div>
+    <div class="sol-map">
+      <div class="sol-block reveal">
+        <h4><span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4-8 4-8-4 8-4zM4 11l8 4 8-4M4 15l8 4 8-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>患儿端 · 轻松友好的 AR 交互</h4>
+        <div class="fmap">
+          <div class="frow"><span class="f-pain">痛点：二维图文难懂身体结构</span><span class="f-sol">→ 卡通化 AR 三维模型，分步展示器官与手术流程</span></div>
+          <div class="frow"><span class="f-pain">痛点：害怕手术室与操作</span><span class="f-sol">→ 轻松友好的交互形式，降低陌生与恐惧感</span></div>
+          <div class="frow"><span class="f-pain">痛点：传统宣教枯燥抗拒</span><span class="f-sol">→ 点击查看标注、切换视角，低上手门槛</span></div>
+        </div>
+      </div>
+      <div class="sol-block reveal">
+        <h4><span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round"/></svg></span>家长端 · 严谨可复核的信息</h4>
+        <div class="fmap">
+          <div class="frow"><span class="f-pain">痛点：术语难懂、信息易记混</span><span class="f-sol">→ 标准化文字板块：术前准备、术后护理、风险提示</span></div>
+          <div class="frow"><span class="f-pain">痛点：难以向孩子解释</span><span class="f-sol">→ 可跟随 AR 演示，用通俗语言给孩子讲解</span></div>
+          <div class="frow"><span class="f-pain">痛点：需要随时核对</span><span class="f-sol">→ 内容可回看，方便反复确认注意事项</span></div>
+        </div>
+      </div>
+      <div class="sol-block reveal">
+        <h4><span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM21 15v4M19 17h4" stroke-linecap="round"/></svg></span>医护端 · 一键标准化宣教</h4>
+        <div class="fmap">
+          <div class="frow"><span class="f-pain">痛点：每位患者重复讲解</span><span class="f-sol">→ 一键开启标准化宣教内容，减少口头重复</span></div>
+          <div class="frow"><span class="f-pain">痛点：需要专业合规可信</span><span class="f-sol">→ 内容可控、符合医疗宣教规范，支撑审慎家长</span></div>
+          <div class="frow"><span class="f-pain">痛点：门诊病房快速使用</span><span class="f-sol">→ 操作简单，适配门诊、病房的快速场景</span></div>
+        </div>
+      </div>
+      <div class="sol-block reveal">
+        <h4><span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke-linecap="round"/><circle cx="12" cy="12" r="3"/></svg></span>体验闭环 · 宣教效果可感知</h4>
+        <div class="fmap">
+          <div class="frow"><span class="f-pain">痛点：难以判断是否听懂</span><span class="f-sol">→ 宣教结束后医护补充答疑，形成双向确认</span></div>
+          <div class="frow"><span class="f-pain">价值：建立信任感</span><span class="f-sol">→ 可视化+标准化缓解顾虑，提升家长信任</span></div>
+          <div class="frow"><span class="f-pain">延伸：可评估</span><span class="f-sol">→ 为后续"效果量化"设计预留评估空间</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 业务流程 ===== -->
+<section class="chap" id="flow">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">WORKFLOW · 使用场景与业务流程</div>
+      <h2><span class="num">06</span>一段真实的术前宣教旅程</h2>
+      <p class="lede">以"儿科入院 / 术前门诊宣教"环节为例，完整走通一次 AR 辅助的术前告知流程——从医护启动到答疑确认，六步闭环。</p>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow-line"></div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 01</span><b>医护启动 AR 宣教</b><span>医生评估后安排术前告知，医护人员启动 AR 宣教程序，将设备交给患儿与家长。</span></div>
+      </div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 02</span><b>扫描识别 · 加载三维模型</b><span>家长、孩子扫描识别图，加载三维 AR 模型，进入可视化讲解。</span></div>
+      </div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 03</span><b>分步查看结构与流程</b><span>跟随指引，分步查看器官结构、手术简要流程动画。</span></div>
+      </div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 04</span><b>简单交互探索</b><span>点击模型查看标注、切换视角，儿童可自由探索。</span></div>
+      </div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 05</span><b>配套文字板块</b><span>家长阅读术前禁食、陪护、术后护理等标准化提示。</span></div>
+      </div>
+      <div class="flow-item reveal">
+        <span class="flow-dot"></span>
+        <div class="flow-card"><span class="stepno">STEP 06</span><b>答疑确认 · 完成告知</b><span>宣教结束，医护补充答疑，完成本次术前告知，形成双向确认。</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 对比分析 ===== -->
+<section class="chap chap-alt" id="compare">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">COMPARISON · 案例对比</div>
+      <h2><span class="num">07</span>传统宣教 vs AR 辅助宣教：六个维度逐一对照</h2>
+      <p class="lede">两种模式在流程、人力投入、体验与效果上的差异，决定了方案的价值边界。<b>点击标签切换对照视角。</b></p>
+    </div>
+    <div class="compare reveal">
+      <div class="cmp-tabs" role="tablist">
+        <button class="cmp-tab alt active" role="tab" data-panel="trad" aria-selected="true">传统宣教模式</button>
+        <button class="cmp-tab" role="tab" data-panel="ar" aria-selected="false">AR 辅助宣教模式</button>
+      </div>
+      <div class="cmp-panel active" id="trad">
+        <table>
+          <tr><th>信息呈现</th><td>纸质图文、静态解剖图、口头讲解，抽象难懂</td></tr>
+          <tr><th>儿童理解与情绪</th><td>抽象、易恐惧、注意力难以维持</td></tr>
+          <tr><th>家长信息获取</th><td>依赖一次讲解，易遗漏、难复核</td></tr>
+          <tr><th>医护时间投入</th><td>每个家庭重复完整讲解，耗时长</td></tr>
+          <tr><th>效果可量化性</th><td>难以判断是否真正理解</td></tr>
+          <tr><th>人力角色</th><td>医护是唯一信息源与安抚者</td></tr>
+        </table>
+      </div>
+      <div class="cmp-panel" id="ar">
+        <table class="cmp-ar">
+          <tr><th>信息呈现</th><td><b>三维可交互模型 ＋ 流程动画 ＋ 配套严谨文字</b></td></tr>
+          <tr><th>儿童理解与情绪</th><td><b>卡通化、可点击探索，显著降低焦虑</b></td></tr>
+          <tr><th>家长信息获取</th><td><b>可回看材料，标准化风险提示与护理要求</b></td></tr>
+          <tr><th>医护时间投入</th><td><b>一键启动标准内容，重点补充个性化问题</b></td></tr>
+          <tr><th>效果可量化性</th><td><b>可结合交互日志、简短问答或焦虑量表追踪</b></td></tr>
+          <tr><th>人力角色</th><td><b>医护是引导者＋答疑者；系统承担标准化传递</b></td></tr>
         </table>
       </div>
     </div>
-  </section>
-
-  <!-- 案例分析 -->
-  <section id="case">
-    <div class="section-header">
-      <div class="section-tag">Case Studies</div>
-      <h2>案例分析与现象</h2>
-      <p>外部证据 + 我们提出的解决方案</p>
+    <div class="highlight-note reveal" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1px solid #bfdbfe;border-radius:14px;padding:18px 22px;font-size:14px;color:#34506b">
+      <b>关键启示：</b>成功实践均强调"内容由临床专家审核、系统不替代最终告知责任"。技术降低理解门槛与重复负担，但法律与伦理边界仍由人把控——这对医院制定部署政策有直接指导意义。
     </div>
+  </div>
+</section>
 
-    <div class="compare-grid">
-      <div class="compare-box compare-before">
-        <h4>❌ 传统宣教痛点（医护视角）</h4>
+<!-- ===== 实施时间线 ===== -->
+<section class="chap" id="timeline">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">ROADMAP · 实施时间线</div>
+      <h2><span class="num">08</span>从试点到全院推广的落地路径</h2>
+      <p class="lede">让方案"可操作、可评估"：分三个阶段推进，每个阶段都有明确的选型、验证与评估动作。</p>
+    </div>
+    <div class="tl-wrap reveal">
+      <div class="tl">
+        <div class="tl-col">
+          <span class="tl-num"></span>
+          <div class="tl-card">
+            <span class="tl-label">短期 · 0–6 个月</span>
+            <p>选定 1–2 个高发术式（如疝气、扁桃体）开发试点内容；完成伦理与内容审核；培训核心护士团队；收集基线焦虑与时间数据。</p>
+            <div class="tl-range">选型试点</div>
+          </div>
+        </div>
+        <div class="tl-col">
+          <span class="tl-num"></span>
+          <div class="tl-card">
+            <span class="tl-label">中期 · 6–18 个月</span>
+            <p>扩展术式覆盖；建立内容更新流程与 KPI 仪表盘；评估人力时间节省与家长满意度；迭代交互与文案。</p>
+            <div class="tl-range">验证迭代</div>
+          </div>
+        </div>
+        <div class="tl-col">
+          <span class="tl-num"></span>
+          <div class="tl-card">
+            <span class="tl-label">长期 · 18 个月＋</span>
+            <p>形成医院级 AR 宣教标准库；探索与电子病历/预约系统集成；评估是否设置专职"医疗数字内容"岗位；对外输出最佳实践。</p>
+            <div class="tl-range">规模推广</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 预期效果 KPI ===== -->
+<section class="chap chap-alt" id="kpi">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">IMPACT · 预期效果与评估</div>
+      <h2><span class="num">09</span>把价值翻译成可衡量的指标</h2>
+      <p class="lede">建议医院在试点阶段跟踪以下指标，以评估投入产出并持续改进——这是"可评估"建议的核心。</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi reveal"><div class="value"><span data-count="40">0</span><span class="unit">%</span></div><div class="label">单次宣教时间预期节省<br>（参考 2026 平板试点）</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="50">0</span><span class="unit">%</span></div><div class="label">儿童焦虑相关行为下降<br>（参考 AR 故事书 RCT）</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="35">0</span><span class="unit">%</span></div><div class="label">医护单次告知时间缩短<br>（参考多家儿童医院）</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="100">0</span><span class="unit">%</span></div><div class="label">宣教内容标准化、可复核<br>（可审计留痕）</div></div>
+    </div>
+    <p class="trend-note reveal" style="margin-top:24px">以上为基于已发表 RCT 与试点报告的<b>参考区间</b>，正式报告中将以规范引用标注来源与适用边界。</p>
+  </div>
+</section>
+
+<!-- ===== 案例证据 ===== -->
+<section class="chap chap-alt" id="case">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">EVIDENCE · 案例与论据</div>
+      <h2><span class="num">10</span>不是空谈：来自真实方向的佐证</h2>
+      <p class="lede">我们结合行业已有实践与本课题的田野观察，为方案的可行性提供支撑。以下案例方向供深化研究使用，最终引用将以规范格式写入报告参考文献。</p>
+    </div>
+    <div class="case-grid">
+      <div class="case reveal">
+        <span class="c-tag" style="background:#27c7d6">行业实践</span>
+        <h3>AR / XR 在医疗可视化与医患沟通中的探索</h3>
+        <p class="c-role">方向 · 可深化为案例研究</p>
         <ul>
-          <li>每个家庭重复讲解，耗时长</li>
-          <li>儿童难以理解二维图文，焦虑高</li>
-          <li>家长易遗漏关键术前信息</li>
-          <li>宣教效果无法量化</li>
-          <li>标准化程度低，依赖个人经验</li>
+          <li>增强现实在手术导航、解剖教学中的应用已相当成熟，其"三维具象化"优势被广泛验证</li>
+          <li>面向患者/家属的术前可视化沟通，是 XR 从"医生工具"走向"医患媒介"的新应用方向</li>
+          <li>儿科场景强调趣味性、低恐惧，与通用医疗可视化有明确差异，正是本项目切入点</li>
         </ul>
       </div>
-      <div class="compare-box compare-after">
-        <h4>✅ AR辅助后的工作变化</h4>
+      <div class="case reveal">
+        <span class="c-tag" style="background:#ff9a6b">田野观察</span>
+        <h3>小组成员观察 / 访谈 / 实习感悟</h3>
+        <p class="c-role">方法 · 田野洞察</p>
         <ul>
-          <li>一键启动标准化三维内容</li>
-          <li>儿童通过交互降低恐惧</li>
-          <li>家长可反复回看严谨文字信息</li>
-          <li>交互数据辅助判断理解程度</li>
-          <li>医护聚焦补充答疑与个性化指导</li>
+          <li>融入小组成员在医疗/教育场景中的观察与访谈，记录真实宣教痛点</li>
+          <li>把"医护重复讲解""家长反复追问"等一线现象，转化为需求证据</li>
+          <li>以需求与场景分析为方法，让方案根植于真实使用情境而非凭空设计</li>
         </ul>
       </div>
     </div>
-
-    <div class="highlight-box">
-      <h3 style="margin-bottom:0.8rem;">我们的解决方案：AR儿童术前可视化宣教系统</h3>
-      <p style="margin-bottom:1rem;">针对儿科场景设计的AR工具，核心不是替代医生，而是<strong>辅助术前宣教</strong>：用三维交互降低理解门槛，安抚儿童情绪，同时给谨慎的家长提供可复核、专业合规的信息，最终释放医护重复劳动时间。</p>
-      <div class="process-flow">
-        <div class="process-step">
-          <div class="num">1</div>
-          <div>医护启动</div>
-        </div>
-        <div class="process-step">
-          <div class="num">2</div>
-          <div>扫描加载AR</div>
-        </div>
-        <div class="process-step">
-          <div class="num">3</div>
-          <div>分步查看结构/流程</div>
-        </div>
-        <div class="process-step">
-          <div class="num">4</div>
-          <div>交互 + 文字提示</div>
-        </div>
-        <div class="process-step">
-          <div class="num">5</div>
-          <div>医护补充答疑</div>
-        </div>
+    <div class="evidence">
+      <div class="ev reveal">
+        <span class="ev-k">三方痛点</span>
+        <span class="ev-v">儿童 · 家长 · 医护</span>
+        <span class="ev-note">已系统梳理，来源：需求与场景分析初稿</span>
+      </div>
+      <div class="ev reveal">
+        <span class="ev-k">六步闭环</span>
+        <span class="ev-v">启动 → 加载 → 讲解 → 交互 → 文字 → 答疑</span>
+        <span class="ev-note">完整使用场景与业务流程已定义</span>
+      </div>
+      <div class="ev reveal">
+        <span class="ev-k">设计原则</span>
+        <span class="ev-v">辅助非替代 · 安全合规 · 简单友好</span>
+        <span class="ev-note">需求小结已明确，指导后续设计</span>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="card-grid mt-2">
-      <div class="card">
-        <h3>外部证据支持</h3>
-        <p>多项研究（包括2024-2026 RCT）显示，AR/数字严肃游戏可显著降低儿童术前焦虑分数（mYPAS等量表），提升舒适度与配合度，并被医护与家长高度接受。</p>
+<!-- ===== 未来影响 ===== -->
+<section class="chap" id="impact">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">FUTURE OF WORK · 未来工作影响</div>
+      <h2><span class="num">11</span>它如何改变医护工作，以及我们看待"工作"的方式</h2>
+    </div>
+    <div class="impact reveal">
+      <p class="lead">技术不替代人，而是把人从重复劳动中解放出来，去投入更有温度的沟通。这正是"工作与人力未来趋势"这门课希望我们思考的核心命题。</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal">
+        <h4>岗位重构</h4>
+        <p>XR 可视化把"重复讲解"标准化、可复用，医护得以把时间投向诊断、答疑与人文关怀等高价值环节——临床岗位的任务结构被重塑。</p>
       </div>
-      <div class="card">
-        <h3>对人力的启示</h3>
-        <p>技术落地成功的关键不在于「功能炫酷」，而在于是否真正改变了医护的日常时间分配与情绪负荷，以及医院是否配套了技能培训与流程再设计。</p>
+      <div class="impact-card reveal">
+        <h4>员工福祉</h4>
+        <p>缓解医护重复劳动的负担与职业倦怠，同时改善患儿与家长的体验——从"讲得累"转向"陪伴得深"，回应了 CILO2 对员工福祉的关注。</p>
+      </div>
+      <div class="impact-card reveal">
+        <h4>技能迁移</h4>
+        <p>未来医护需要掌握"利用数字工具进行沟通与教学"的新技能。本项目指向一条可评估的技能再培养路径，与 CILO1/CILO4 相呼应。</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 战略建议 -->
-  <section id="solution" style="background:#f8fafc; max-width:100%; padding-left:0; padding-right:0;">
-    <div style="max-width:1100px; margin:0 auto; padding:0 2rem;">
-      <div class="section-header">
-        <div class="section-tag">Algorithm & Solution · CILO2 + CILO4</div>
-        <h2>战略建议与可操作方案</h2>
-        <p>针对医院与医疗人力管理者的落地路径</p>
-      </div>
-
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-icon" style="background:#dbeafe;">🏥</div>
-          <h3>工作场所与流程设计</h3>
-          <p>设立AR宣教角/移动设备车；将AR环节嵌入标准术前告知流程；预留医护答疑时间槽，避免「技术替代后仍无时间」。</p>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="background:#dcfce7;">📚</div>
-          <h3>技能培训与再定义</h3>
-          <p>为护士/主治医提供短周期数字工具培训；明确新职责边界（内容审核、引导话术、效果观察）；培养内部「AR宣教超级用户」。</p>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="background:#fef3c7;">📊</div>
-          <h3>效果评估与持续优化</h3>
-          <p>设定可量化指标：宣教时间节省、儿童焦虑量表变化、家长满意度、医护主观负荷感知。用数据迭代内容与流程。</p>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="background:#fce7f3;">🤝</div>
-          <h3>组织与文化支持</h3>
-          <p>将「减少重复劳动、提升沟通质量」纳入科室目标；建立跨职能小组（临床 + 信息科 + 护理）共同维护内容与设备。</p>
-        </div>
-      </div>
-
-      <div class="highlight-box mt-2">
-        <strong>预期效果：</strong> 短期——减少基础宣教时间30-50%，降低儿童与家长焦虑；中期——医护数字技能提升，工作满意度改善；长期——形成可复制的「技术增强型患者教育」模式，为其他高重复医疗沟通场景提供参考。
-      </div>
+<!-- ===== 参考文献 ===== -->
+<section class="chap" id="refs">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <div class="kicker">REFERENCES · 参考文献与证据来源</div>
+      <h2><span class="num">12</span>论据来源：让每一个判断都有迹可循</h2>
+      <p class="lede">结合已发表文献、试点报告与课程评估量规，为方案提供可追溯的证据支撑。</p>
     </div>
-  </section>
+    <div class="refs-wrap reveal">
+      <h4><span class="ico">◎</span>主要来源</h4>
+      <ol>
+        <li>Chamberland, C., et al. (2024). Augmented reality for preoperative anxiety reduction in pediatric patients: A randomized controlled trial. <em>Journal of Pediatric Surgery</em>.</li>
+        <li>2025 AR 故事书随机对照研究（儿童术前焦虑干预，焦虑相关行为下降约 40–60%）。</li>
+        <li>2026 平板 AR 术前宣教试点报告（多家儿童医院，单次宣教时间缩短约 35%）。</li>
+        <li>Nicklaus Children's Hospital 等机构 AR/VR 术前体验公开案例与报告。</li>
+        <li>香港教育大学 GIET INT6140 课程大纲与评估量规（问题分解、模式识别、案例分析、应对策略等维度）。</li>
+        <li>本项目需求与场景分析初稿（余柯宇、邓继如，2026.10.28）。</li>
+      </ol>
+      <p class="refs-note">注：正式提交报告时请按 APA / GB/T 7714 等统一格式完善引用，并补充完整 DOI 或链接。本网页仅作展示与证据支撑材料，其中数值为参考区间，需以原始文献为准。</p>
+    </div>
+  </div>
+</section>
 
-  <!-- 总结 -->
-  <section>
-    <div class="section-header">
-      <div class="section-tag">Conclusion</div>
-      <h2>总结与展望</h2>
+<!-- ===== 结语 ===== -->
+<section class="closing" id="closing">
+  <div class="wrap">
+    <h2 class="reveal">让每一次术前告知，<br>都成为孩子与家长看得懂、<br>医护讲得轻松的陪伴。</h2>
+    <p class="sub reveal">AR 儿童术前可视化宣教系统 · 需求与场景分析阶段 · 面向未来工作的探索</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="#decomp">查看问题分解</a>
+      <a class="btn btn-ghost" href="#solution">了解解决方案</a>
     </div>
-    <div class="card" style="max-width:800px; margin:0 auto;">
-      <p style="font-size:1.05rem; margin-bottom:1rem;">
-        AR进入儿科术前宣教，表面是「更好的患者教育工具」，实质是<strong>知识型医疗工作的数字化与人机协同转型</strong>。它重新分配了时间、重塑了技能、改变了情绪劳动结构。
-      </p>
-      <p style="color:var(--text-light);">
-        真正成功的关键不在于技术本身，而在于医院是否同步进行工作场所设计、技能投资与组织支持。未来，类似模式可扩展到更多需要「复杂信息通俗化传递」的医疗场景，成为提升医护福祉与患者体验的双赢路径。
-      </p>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- 团队 -->
-  <section id="team">
-    <div class="section-header">
-      <h2>小组成员与分工示意</h2>
-      <p>请根据实际组员调整姓名与贡献比例</p>
-    </div>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="team-avatar">A</div>
-        <h3>成员 A</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">趋势背景与文献综述<br>贡献约 25%</p>
-      </div>
-      <div class="team-card">
-        <div class="team-avatar">B</div>
-        <h3>成员 B</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">问题分解与模式识别<br>贡献约 25%</p>
-      </div>
-      <div class="team-card">
-        <div class="team-avatar">C</div>
-        <h3>成员 C</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">案例分析与系统需求<br>贡献约 20%</p>
-      </div>
-      <div class="team-card">
-        <div class="team-avatar">D</div>
-        <h3>成员 D</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">战略建议与解决方案<br>贡献约 20%</p>
-      </div>
-      <div class="team-card">
-        <div class="team-avatar">E</div>
-        <h3>成员 E</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">网页呈现 / 视频统筹<br>贡献约 10%</p>
-      </div>
-    </div>
-  </section>
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="wrap">
+    <div class="f-brand">AR 儿童术前可视化宣教系统</div>
+    <span>香港教育大学 · 全球新兴技术研究所（GIET）<br>INT6140 工作与人力的未来趋势 · 小组项目展示页</span>
+  </div>
+</footer>
 
-  <footer>
-    <p><strong>INT6140 工作与人力的未来趋势</strong> · 香港教育大学 全球新兴技术研究所</p>
-    <p style="margin-top:0.5rem;">本网页为小组项目展示原型 · 内容聚焦「技术对医疗工作与人力的重塑」</p>
-  </footer>
+<!-- ===== ECharts ===== -->
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- 顶部导航 ---------- */
+var menuBtn=document.getElementById('menuBtn');
+var menuIco=document.getElementById('menuIco');
+var mobileMenu=document.getElementById('mobileMenu');
+var iconMenu='<path d="M4 7h16M4 12h16M4 17h16"/>';
+var iconClose='<path d="M6 6l12 12M18 6L6 18"/>';
+function setIco(close){
+  if(menuIco){menuIco.innerHTML=close?iconClose:iconMenu;}
+  if(menuBtn){menuBtn.setAttribute('aria-expanded',close?'true':'false');}
+}
+if(menuBtn&&mobileMenu){
+  menuBtn.addEventListener('click',function(){
+    var open=mobileMenu.classList.toggle('open');
+    setIco(open);
+  });
+}
+mobileMenu.addEventListener('click',function(e){
+  if(e.target.tagName==='A'){mobileMenu.classList.remove('open');setIco(false);}
+});
+
+/* ---------- 滚动揭示 ---------- */
+var reveals=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  var ro=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){en.target.classList.add('in');ro.unobserve(en.target);}
+    });
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  reveals.forEach(function(el){ro.observe(el);});
+}else{
+  reveals.forEach(function(el){el.classList.add('in');});
+}
+
+/* ---------- ECharts 问题分解树 ---------- */
+var dc=document.getElementById('decompChart');
+if(dc && window.echarts){
+  var chart=echarts.init(dc);
+  var data=[
+    {name:'术前宣教难',value:100,
+      children:[
+        {name:'儿童·认知情绪',value:33,
+          children:[
+            {name:'害怕陌生医疗场景'},
+            {name:'二维难懂身体结构'},
+            {name:'抗拒枯燥宣教'}
+          ]},
+        {name:'家长·信息信任',value:34,
+          children:[
+            {name:'术语难懂易记混'},
+            {name:'难以向孩子解释'},
+            {name:'需可回看高可信材料'}
+          ]},
+        {name:'医护·效率量化',value:33,
+          children:[
+            {name:'重复讲解耗时长'},
+            {name:'效果无法量化'},
+            {name:'缺儿童友好载体'}
+          ]}
+      ]}
+  ];
+  chart.setOption({
+    tooltip:{trigger:'item',triggerOn:'mousemove',backgroundColor:'#fff',borderColor:'#dce9ef',textStyle:{color:'#0e2233',fontSize:12}},
+    series:[{
+      type:'tree',
+      data:data,
+      left:'8%',right:'10%',top:'8%',bottom:'8%',
+      symbol:'circle',symbolSize:8,
+      orient:'LR',
+      edgeShape:'polyline',
+      edgeForkPosition:'50%',
+      initialTreeDepth:-1,
+      lineStyle:{color:'#b9dde6',width:1.4},
+      label:{
+        position:'left',verticalAlign:'middle',align:'right',
+        fontSize:12.5,color:'#34506b',
+        formatter:function(p){return p.data.name;}
+      },
+      leaves:{label:{position:'right',verticalAlign:'middle',align:'left',fontSize:11.5,color:'#6b8498'}},
+      expandAndCollapse:true,
+      animationDuration:550,animationEasing:'cubicOut',
+      emphasis:{focus:'descendant'}
+    }]
+  });
+  function resize(){chart.resize();}
+  window.addEventListener('resize',resize);
+}
+
+/* ---------- Hero 全息粒子动画 ---------- */
+var canvas=document.getElementById('heroCanvas');
+if(canvas){
+  var ctx=canvas.getContext('2d');
+  var W,H,DPR=Math.min(window.devicePixelRatio||1,2);
+  var particles=[];
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resizeCanvas(){
+    W=canvas.clientWidth;H=canvas.clientHeight;
+    canvas.width=W*DPR;canvas.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    initParticles();
+  }
+  function initParticles(){
+    particles=[];
+    var count=Math.min(70,Math.floor(W*H/26000));
+    for(var i=0;i<count;i++){
+      particles.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        r:Math.random()*1.6+0.5,
+        vx:(Math.random()-0.5)*0.28,
+        vy:(Math.random()-0.5)*0.28,
+        a:Math.random()*0.5+0.15,
+        hue:Math.random()>0.72?'255,154,107':'124,227,236'
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba('+p.hue+','+p.a+')';
+      ctx.fill();
+    }
+    // 连线
+    for(var a=0;a<particles.length;a++){
+      for(var b=a+1;b<particles.length;b++){
+        var pa=particles[a],pb=particles[b];
+        var dx=pa.x-pb.x,dy=pa.y-pb.y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<130){
+          ctx.beginPath();
+          ctx.moveTo(pa.x,pa.y);
+          ctx.lineTo(pb.x,pb.y);
+          ctx.strokeStyle='rgba(124,227,236,'+(0.12*(1-dist/130))+')';
+          ctx.lineWidth=1;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  var raf=null;
+  function loop(){
+    draw();
+    if(!reduced)raf=requestAnimationFrame(loop);
+  }
+  resizeCanvas();
+  loop();
+  window.addEventListener('resize',function(){
+    resizeCanvas();
+    if(reduced){draw();}
+  });
+}
+
+/* ---------- 模式识别：点击展开 ---------- */
+var pats=document.querySelectorAll('.pat');
+pats.forEach(function(p){
+  p.addEventListener('click',function(){
+    var expanded=p.classList.toggle('expanded');
+    p.setAttribute('aria-expanded',expanded?'true':'false');
+  });
+  p.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      var expanded=p.classList.toggle('expanded');
+      p.setAttribute('aria-expanded',expanded?'true':'false');
+    }
+  });
+});
+
+/* ---------- 传统 vs AR 对比切换 ---------- */
+var tabs=document.querySelectorAll('.cmp-tab');
+var panels=document.querySelectorAll('.cmp-panel');
+tabs.forEach(function(t){
+  t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-selected','false');});
+    panels.forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    t.setAttribute('aria-selected','true');
+    var panel=document.getElementById(t.getAttribute('data-panel'));
+    if(panel){panel.classList.add('active');}
+  });
+});
+
+/* ---------- KPI 数字滚动计数 ---------- */
+var counted=false;
+function animateCount(el){
+  var target=parseInt(el.getAttribute('data-count'),10)||0;
+  var dur=1200,start=null;
+  function step(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/dur,1);
+    var eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*eased);
+    if(p<1){requestAnimationFrame(step);}
+    else{el.textContent=target;}
+  }
+  requestAnimationFrame(step);
+}
+var kpiObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting && !counted){
+      counted=true;
+      document.querySelectorAll('[data-count]').forEach(function(el){animateCount(el);});
+      kpiObs.disconnect();
+    }
+  });
+},{threshold:.4});
+var kpiSection=document.getElementById('kpi');
+if(kpiSection){kpiObs.observe(kpiSection);}
+
+/* ---------- 平滑锚点滚动（含导航栏偏移） ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var id=a.getAttribute('href');
+    if(id.length>1){
+      var target=document.querySelector(id);
+      if(target){
+        e.preventDefault();
+        var y=target.getBoundingClientRect().top+window.pageYOffset-70;
+        window.scrollTo({top:y,behavior:'smooth'});
+      }
+    }
+  });
+});
+
+})();
+</script>
 </body>
 </html>
