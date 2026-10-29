@@ -384,6 +384,14 @@ footer span{line-height:1.8}
 .refs-wrap ol{padding-left:20px;display:flex;flex-direction:column;gap:9px}
 .refs-wrap li{font-size:13px;color:var(--ink-soft);line-height:1.7}
 .refs-note{margin-top:16px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.ref-toggle{
+  display:inline-block;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--teal);
+  background:rgba(63,167,168,.08);border:1px solid rgba(63,167,168,.3);border-radius:999px;
+  padding:7px 16px;cursor:pointer;transition:background .2s;
+}
+.ref-toggle:hover{background:rgba(63,167,168,.16)}
+.ref-collapse{max-height:0;overflow:hidden;transition:max-height .5s ease;opacity:0}
+.ref-collapse.open{max-height:600px;opacity:1}
 
 </style>
 </head>
@@ -460,12 +468,12 @@ footer span{line-height:1.8}
       <div class="trend-card reveal">
         <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18" stroke-linecap="round"/></svg></span>信息抽象 · 儿童难以理解医学知识</h3>
         <span class="tag">医患沟通</span>
-        <p>纸质图文、静态解剖图、普通视频对儿童而言过于抽象，容易放大对手术、打针、手术室环境的恐惧与焦虑；家长也容易遗漏术前禁食、护理、风险等关键信息。</p>
+        <p>纸质图文、静态解剖图、普通视频对儿童而言偏抽象，家长容易遗漏术前禁食、护理、风险等关键信息——"讲过了"不等于"听懂了"。</p>
       </div>
       <div class="trend-card reveal">
         <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke-linecap="round"/></svg></span>XR 可视化 · 把抽象变直观</h3>
         <span class="tag">技术机遇</span>
-        <p>增强现实能以三维交互方式呈现手术结构与流程，把看不见的人体内部"具象化"，显著降低理解门槛——这正是数字技术改变医学沟通的切入点。</p>
+        <p>增强现实能以三维交互方式呈现手术结构与流程，把看不见的人体内部"具象化"，降低理解门槛——但文献提醒：真正的增益来自<b>个体化内容</b>，而非技术形态本身。</p>
       </div>
       <div class="trend-card reveal">
         <h3><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z"/></svg></span>高敏感人群 · 家长群体的特殊性</h3>
@@ -473,7 +481,24 @@ footer span{line-height:1.8}
         <p>对应儿童手术的家长是最谨慎、关注度最高的群体：心疼孩子、惧怕风险、反复核对信息。技术方案必须同时服务"理性核实"与"情感安抚"两种需求。</p>
       </div>
     </div>
-    <p class="trend-note reveal">核心主张：本项目不以替代医生诊断和告知为目标，而是<b>辅助术前宣教</b>——用 AR 可视化降低医学信息理解门槛，安抚儿童情绪，给家长严谨、清晰、可复核的内容，同时提升医护效率。</p>
+    <div class="evidence" style="margin-top:26px">
+      <div class="ev reveal">
+        <span class="ev-k">沟通窗口</span>
+        <span class="ev-v">3–5 分钟</span>
+        <span class="ev-note">麻醉医生平均在每个家庭停留的时间（术前等候区观察研究）</span>
+      </div>
+      <div class="ev reveal">
+        <span class="ev-k">禁食理解缺口</span>
+        <span class="ev-v">13.5%</span>
+        <span class="ev-note">虽被确认"已禁食"，患儿实际仍未达标（日间手术研究）</span>
+      </div>
+      <div class="ev reveal">
+        <span class="ev-k">测量缺口</span>
+        <span class="ev-v">仅 42%</span>
+        <span class="ev-note">研究真正评估了知情同意的全部四要素（40 项综述）</span>
+      </div>
+    </div>
+    <p class="trend-note reveal">核心主张：本项目不以替代医生诊断和告知为目标，而是<b>辅助术前宣教</b>——在 3–10 分钟沟通窗口内，用短时、交互、可回看的 AR 可视化，把器官结构、手术流程和术后护理转化为家长与儿童可共同理解、可反复核对的内容。</p>
   </div>
 </section>
 
@@ -605,8 +630,8 @@ footer span{line-height:1.8}
     </div>
     <div class="sol-intro reveal">
       <h3>设计主张</h3>
-      <p>本 AR 系统的核心目标不是替代医生诊断和告知，而是<b style="color:#2f8d8e">辅助术前宣教</b>。优先保证内容安全合规、交互简单友好，适配儿童患者及家属使用——用可视化降低理解门槛，用标准化提升医护效率。</p>
-      <span class="pill">核心：不是替代，而是辅助</span>
+      <p>本 AR 系统的核心目标不是替代医生诊断和告知，而是<b style="color:#2f8d8e">辅助术前宣教</b>。基于 14 篇文献，我们得出三条证据驱动的设计选择：<b>① 优先个体化内容</b>（患者自己的影像比通用动画更能提升理解）；<b>② 结尾加"复述"环节</b>（证据里最有效的一步，成本几乎为零）；<b>③ 短时、交互、可回看</b>（适配 3–10 分钟的术前沟通窗口）。</p>
+      <span class="pill">核心：看得懂 · 讲得回 · 讲得快</span>
     </div>
     <div class="sol-map">
       <div class="sol-block reveal">
@@ -709,16 +734,16 @@ footer span{line-height:1.8}
       <div class="cmp-panel" id="ar">
         <table class="cmp-ar">
           <tr><th>信息呈现</th><td><b>三维可交互模型 ＋ 流程动画 ＋ 配套严谨文字</b></td></tr>
-          <tr><th>儿童理解与情绪</th><td><b>卡通化、可点击探索，显著降低焦虑</b></td></tr>
+          <tr><th>儿童理解与情绪</th><td><b>卡通化、可点击探索；AR 故事书可降低恐惧（有 RCT 支持）</b></td></tr>
           <tr><th>家长信息获取</th><td><b>可回看材料，标准化风险提示与护理要求</b></td></tr>
-          <tr><th>医护时间投入</th><td><b>一键启动标准内容，重点补充个性化问题</b></td></tr>
-          <tr><th>效果可量化性</th><td><b>可结合交互日志、简短问答或焦虑量表追踪</b></td></tr>
+          <tr><th>医护时间投入</th><td><b>标准化内容可复用；骨科研究术前谈话 665 秒→93 秒</b></td></tr>
+          <tr><th>效果可量化性</th><td><b>可结合交互日志、简短问答或理解量追踪</b></td></tr>
           <tr><th>人力角色</th><td><b>医护是引导者＋答疑者；系统承担标准化传递</b></td></tr>
         </table>
       </div>
     </div>
     <div class="highlight-note reveal" style="margin-top:20px;background:linear-gradient(135deg,#eef5f1,#f4efe6);border:1px solid #c5d8cf;border-radius:14px;padding:18px 22px;font-size:14px;color:var(--ink-soft)">
-      <b>关键启示：</b>成功实践均强调"内容由临床专家审核、系统不替代最终告知责任"。技术降低理解门槛与重复负担，但法律与伦理边界仍由人把控——这对医院制定部署政策有直接指导意义。
+      <b>诚实的定位：</b>文献显示，AR 对理解的提升主要来自<b>个体化内容</b>与<b>"让患者复述"</b>两个变量，而非技术形态本身；我们选 AR 是因为它更适<b>床边共享屏幕</b>的实施场景，而非疗效更强。技术降低理解门槛与重复负担，但法律与伦理边界仍由人把控。
     </div>
   </div>
 </section>
@@ -766,17 +791,17 @@ footer span{line-height:1.8}
 <section class="chap chap-alt" id="kpi">
   <div class="wrap">
     <div class="chap-head reveal">
-      <div class="kicker">IMPACT · 预期效果与评估</div>
-      <h2><span class="num">09</span>把价值翻译成可衡量的指标</h2>
-      <p class="lede">建议医院在试点阶段跟踪以下指标，以评估投入产出并持续改进——这是"可评估"建议的核心。</p>
+      <div class="kicker">EVIDENCE · 来自文献的真实数据</div>
+      <h2><span class="num">09</span>看得懂的，才是有效的——证据说了什么</h2>
+      <p class="lede">以下数字均来自已发表的研究，是"为什么这样做"的支撑。我们有意标注来源，不夸大、不编造。</p>
     </div>
     <div class="kpi-grid">
-      <div class="kpi reveal"><div class="value"><span data-count="40">0</span><span class="unit">%</span></div><div class="label">单次宣教时间预期节省<br>（参考 2026 平板试点）</div></div>
-      <div class="kpi reveal"><div class="value"><span data-count="50">0</span><span class="unit">%</span></div><div class="label">儿童焦虑相关行为下降<br>（参考 AR 故事书 RCT）</div></div>
-      <div class="kpi reveal"><div class="value"><span data-count="35">0</span><span class="unit">%</span></div><div class="label">医护单次告知时间缩短<br>（参考多家儿童医院）</div></div>
-      <div class="kpi reveal"><div class="value"><span data-count="100">0</span><span class="unit">%</span></div><div class="label">宣教内容标准化、可复核<br>（可审计留痕）</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="100">0</span><span class="unit">%</span></div><div class="label">三维打印模型下，病灶范围理解率（原 70%）· 肝脏手术 RCT</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="93">0</span><span class="unit">秒</span></div><div class="label">VR 标准化影片将术前谈话由 665 秒压缩至 93 秒 · 骨科 RCT</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="4535">0</span><span class="unit">例</span></div><div class="label">49 项 RCT 汇总的儿科手术患者 · VR 降低术前焦虑</div></div>
+      <div class="kpi reveal"><div class="value"><span data-count="135">0</span><span class="unit">‰</span></div><div class="label">13.5% 患儿虽被确认"已禁食"仍实际未达标 · 日间手术研究</div></div>
     </div>
-    <p class="trend-note reveal" style="margin-top:24px">以上为基于已发表 RCT 与试点报告的<b>参考区间</b>，正式报告中将以规范引用标注来源与适用边界。</p>
+    <p class="trend-note reveal" style="margin-top:24px">注：文献显示，AR 对<b>焦虑</b>的改善证据并不稳定（麻醉诱导时差别常消失），对<b>理解</b>的提升则依赖"个体化内容"与"让患者复述"。我们据此将效果目标定为"看得懂、讲得回、讲得快"，而非"消除焦虑"。</p>
   </div>
 </section>
 
@@ -785,20 +810,54 @@ footer span{line-height:1.8}
   <div class="wrap">
     <div class="chap-head reveal">
       <div class="kicker">EVIDENCE · 案例与论据</div>
-      <h2><span class="num">10</span>不是空谈：来自真实方向的佐证</h2>
-      <p class="lede">我们结合行业已有实践与本课题的田野观察，为方案的可行性提供支撑。以下案例方向供深化研究使用，最终引用将以规范格式写入报告参考文献。</p>
+      <h2><span class="num">10</span>文献怎么说：证据支撑我们的每一个判断</h2>
+      <p class="lede">我们系统阅读了 2019–2026 年间 14 篇相关研究（含 5 篇综述、6 项随机对照试验），以下是经得起追问的关键证据。</p>
     </div>
     <div class="case-grid">
       <div class="case reveal">
-        <span class="c-tag" style="background:var(--teal)">行业实践</span>
-        <h3>AR / XR 在医疗可视化与医患沟通中的探索</h3>
-        <p class="c-role">方向 · 可深化为案例研究</p>
+        <span class="c-tag" style="background:var(--teal)">关键发现 ①</span>
+        <h3>起作用的不是"技术先进"，是"内容是谁的"</h3>
+        <p class="c-role">个体化内容 vs 通用内容，结局差别明显</p>
         <ul>
-          <li>增强现实在手术导航、解剖教学中的应用已相当成熟，其"三维具象化"优势被广泛验证</li>
-          <li>面向患者/家属的术前可视化沟通，是 XR 从"医生工具"走向"医患媒介"的新应用方向</li>
-          <li>儿科场景强调趣味性、低恐惧，与通用医疗可视化有明确差异，正是本项目切入点</li>
+          <li><b>通用内容</b>：100 例肾脏手术 RCT，AR 组与"讨论＋影像＋手绘图"的理解无差异，仅满意度更高（Miller 2024）</li>
+          <li><b>个体化内容</b>：肝脏手术三维打印模型，病灶范围理解 70%→100%、位置 65%→95%（Giehl-Brown 2023）</li>
+          <li>直肠癌个体化三维建模：医患"手术目标"一致率 84% vs 60%（Fletcher 2025）</li>
+          <li><b>启示</b>：先做"患者自己的影像"，再做"好看的动画"</li>
         </ul>
       </div>
+      <div class="case reveal">
+        <span class="c-tag" style="background:var(--apricot)">关键发现 ②</span>
+        <h3>最有效的一步：讲完让患者复述一遍</h3>
+        <p class="c-role">互动式沟通比任何单一技术都重要</p>
+        <ul>
+          <li>52 项研究综述：沟通方式越互动，理解越好；"讲完让患者复述"成功率最高（Glaser 2020）</li>
+          <li>签字的效力有了，理解的效果未必——只有 42% 研究真正评估知情同意的全部四要素</li>
+          <li><b>启示</b>：宣教结尾加一个"请你说一遍"环节，成本几乎为零，效果证据最稳</li>
+        </ul>
+      </div>
+      <div class="case reveal">
+        <span class="c-tag" style="background:var(--teal)">关键发现 ③</span>
+        <h3>为什么选 AR 而不是 VR？是场景优势，不是疗效优势</h3>
+        <p class="c-role">诚实的定位，经得起追问</p>
+        <ul>
+          <li>16 项研究综述：VR 效果一致为正；AR/MR 研究少、结果不一（Wehrkamp 2025）</li>
+          <li>我们选 AR，是因为它<b>不用戴封闭头显、医生和患者共享同一块屏幕</b>，还能指着患者身体讲</li>
+          <li>这是实施性优势，不是疗效优势——这样表述更诚实、更可信</li>
+        </ul>
+      </div>
+      <div class="case reveal">
+        <span class="c-tag" style="background:var(--apricot)">关键发现 ④</span>
+        <h3>别踩这四个易被问倒的判断</h3>
+        <p class="c-role">我们主动规避了常见的夸大表述</p>
+        <ul>
+          <li><b>"技术越新效果越好"？</b>否——可视化与口头讲解无显著差异（Galmarini 2024）</li>
+          <li><b>"能消除焦虑"？</b>否——儿童 AR 只降入室焦虑，麻醉诱导时差别消失（Chamberland 2024）</li>
+          <li><b>"我们是国内首个"？</b>否——2026 已有国内 62 例 AR 神经外科 RCT（Yuan 2026）</li>
+          <li><b>诚实的承诺</b>：看得懂、讲得回、讲得快——每一条都有数据支撑</li>
+        </ul>
+      </div>
+    </div>
+    <div class="case-grid" style="margin-top:0">
       <div class="case reveal">
         <span class="c-tag" style="background:var(--apricot)">田野观察</span>
         <h3>小组成员观察 / 访谈 / 实习感悟</h3>
@@ -809,6 +868,21 @@ footer span{line-height:1.8}
           <li>以需求与场景分析为方法，让方案根植于真实使用情境而非凭空设计</li>
         </ul>
       </div>
+      <div class="case reveal">
+        <span class="c-tag" style="background:var(--teal)">设计原则</span>
+        <h3>我们把证据翻译成四条设计原则</h3>
+        <p class="c-role">从文献到产品</p>
+        <ul>
+          <li><b>定位</b>：说"辅助"，不说"替代"——现有证据恰好否掉"替代"</li>
+          <li><b>设计</b>：先做个体化影像，再做通用动画；结尾加"复述"环节</li>
+          <li><b>评价</b>：别只测满意度，要测"能否用自己的话讲清楚手术"</li>
+          <li><b>表述</b>：换成"看得懂、讲得回、讲得快"，每句都有数据支撑</li>
+        </ul>
+      </div>
+    </div>
+    <div class="decomp-chart reveal" style="margin-top:26px;min-height:400px">
+      <div id="understandChart" role="img" aria-label="个体化内容提升患者理解率的对比图" style="width:100%;height:400px"></div>
+      <p class="ev-note" style="padding:0 14px 10px">个体化三维内容显著提升患者对病灶的理解率——数据来自 Giehl-Brown 2023（肝脏手术三维打印模型，RCT）。</p>
     </div>
     <div class="evidence">
       <div class="ev reveal">
@@ -823,8 +897,8 @@ footer span{line-height:1.8}
       </div>
       <div class="ev reveal">
         <span class="ev-k">设计原则</span>
-        <span class="ev-v">辅助非替代 · 安全合规 · 简单友好</span>
-        <span class="ev-note">需求小结已明确，指导后续设计</span>
+        <span class="ev-v">看得懂 · 讲得回 · 讲得快</span>
+        <span class="ev-note">每条均有文献数据支撑</span>
       </div>
     </div>
   </div>
@@ -862,20 +936,41 @@ footer span{line-height:1.8}
   <div class="wrap">
     <div class="chap-head reveal">
       <div class="kicker">REFERENCES · 参考文献与证据来源</div>
-      <h2><span class="num">12</span>论据来源：让每一个判断都有迹可循</h2>
-      <p class="lede">结合已发表文献、试点报告与课程评估量规，为方案提供可追溯的证据支撑。</p>
+      <h2><span class="num">12</span>14 篇文献 + 行业调研：每一个判断都有迹可循</h2>
+      <p class="lede">我们系统阅读了 2019–2026 年间的相关研究（含 5 篇综述、6 项随机对照试验），并完成行业与政策背景调研。点击年份可查看全部完整题录。</p>
     </div>
     <div class="refs-wrap reveal">
-      <h4><span class="ico">◎</span>主要来源</h4>
-      <ol>
-        <li>Chamberland, C., et al. (2024). Augmented reality for preoperative anxiety reduction in pediatric patients: A randomized controlled trial. <em>Journal of Pediatric Surgery</em>.</li>
-        <li>2025 AR 故事书随机对照研究（儿童术前焦虑干预，焦虑相关行为下降约 40–60%）。</li>
-        <li>2026 平板 AR 术前宣教试点报告（多家儿童医院，单次宣教时间缩短约 35%）。</li>
-        <li>Nicklaus Children's Hospital 等机构 AR/VR 术前体验公开案例与报告。</li>
-        <li>香港教育大学 GIET INT6140 课程大纲与评估量规（问题分解、模式识别、案例分析、应对策略等维度）。</li>
-        <li>本项目需求与场景分析初稿（余柯宇、邓继如，2026.10.28）。</li>
+      <h4><span class="ico">◎</span>文献综述 · 纳入的 14 篇研究</h4>
+      <button class="ref-toggle" aria-expanded="false">展开 / 收起完整题录</button>
+      <ol id="refList" class="ref-collapse">
+        <li>Chamberland, C., Bransi, M., Boivin, A., et al. (2024). The effect of augmented reality on preoperative anxiety in children and adolescents: A randomized controlled trial. <em>Paediatric Anaesthesia, 34</em>(2), 153–159.</li>
+        <li>Evans, T., Turna, A., Stringfellow, T. D., &amp; Jones, G. G. (2025). Uses of augmented reality in surgical consent and patient education – A systematic review. <em>PLOS Digital Health, 4</em>(4), e0000777.</li>
+        <li>Fletcher, J. A., Corr, A., Drami, I., et al. (2025). Enhancing decision-making and patient comprehension in complex rectal cancer surgery through personalized three-dimensional imaging. <em>British Journal of Surgery, 112</em>(6), znaf116.</li>
+        <li>Galmarini, E., Marciano, L., &amp; Schulz, P. J. (2024). The effectiveness of visual-based interventions on health literacy: A systematic review and meta-analysis. <em>BMC Health Services Research, 24</em>(1), 718.</li>
+        <li>Giehl-Brown, E., Dennler, S., et al. (2023). 3D liver model-based surgical education improves preoperative decision-making and patient satisfaction. <em>Surgical Endoscopy, 37</em>(6), 4545–4554.</li>
+        <li>Glaser, J., Nouri, S., et al. (2020). Interventions to improve patient comprehension in informed consent: An updated systematic review. <em>Medical Decision Making, 40</em>(2), 119–143.</li>
+        <li>Kiernan, A., Fahey, B., et al. (2023). Digital technology in informed consent for surgery: Systematic review. <em>BJS Open, 7</em>(1), zrac159.</li>
+        <li>Kornmann, J., Lorenz, P., et al. (2026). "When patients see what the surgeon sees": 3D imaging in preoperative counseling for endoscopic sinus surgery. <em>Acta Oto-Laryngologica, 146</em>(8), 988–996.</li>
+        <li>Lee, J. J., Klepcha, M., et al. (2022). The first pilot study of a 360° augmented reality visualization platform for neurosurgical patient education. <em>Operative Neurosurgery, 23</em>(1), 53–59.</li>
+        <li>Miller, C. A., Locke, R. A., et al. (2024). Evaluation of a novel augmented reality educational tool: A randomized controlled trial. <em>Indian Journal of Urology, 40</em>(1), 25–30.</li>
+        <li>Perin, A., Galbiati, T. F., et al. (2021). Informed consent through 3D virtual reality: A randomized clinical trial. <em>Acta Neurochirurgica, 163</em>(2), 301–308.</li>
+        <li>Simon, S., Opfermann, P., Hofstaetter, J. G., &amp; Marhofer, P. (2024). Virtual reality-assisted informed consent for anesthesia: A proof-of-concept study. <em>Journal of Clinical Medicine, 13</em>(20), 6096.</li>
+        <li>Wehrkamp, K., Miksch, R. C., et al. (2025). The impact of virtual-, augmented- and mixed reality during preoperative informed consent: A systematic review. <em>Journal of Medical Systems, 49</em>(1), 89.</li>
+        <li>Yuan, Z., Shi, Z., &amp; Wang, Z. (2026). The real-time support role of augmented reality technology in shared decision-making in neurosurgery: RCT. <em>Journal of Medical Internet Research, 28</em>, e87198.</li>
       </ol>
-      <p class="refs-note">注：正式提交报告时请按 APA / GB/T 7714 等统一格式完善引用，并补充完整 DOI 或链接。本网页仅作展示与证据支撑材料，其中数值为参考区间，需以原始文献为准。</p>
+    </div>
+    <div class="refs-wrap reveal" style="margin-top:18px">
+      <h4><span class="ico">◎</span>行业与政策调研</h4>
+      <ol>
+        <li>Cantellow, S., Lightfoot, J., &amp; Beringer, R. (2012). Parents' understanding of and compliance with fasting instruction for pediatric day case surgery. <em>Pediatric Anesthesia, 22</em>(9), 897–900.（13.5% 禁食未达标）</li>
+        <li>MacLaren, J. E., Hammell, C., et al. (2008). How much time do we spend in preoperative holding. <em>SPA News</em>.（麻醉医生每家庭 3–5 分钟）</li>
+        <li>Luo, Z., Zhou, R., et al. (2025). Digital health interventions in pediatric perioperative care: A network meta-analysis. <em>JAMA Pediatrics, 179</em>(11), 1153–1161.（49 项 RCT、4535 例）</li>
+        <li>胡芷蘐, 姚洁, 等. (2024). 虚拟现实暴露在手术患儿中应用效果的 Meta 分析. <em>中华护理杂志, 59</em>(24), 3041.（9 项 RCT、900 例）</li>
+        <li>Sekeler, A., &amp; Karaarslan, D. (2025). AR storybook vs normal storybook on preoperative fear of children 7–12. <em>Journal of Pediatric Urology, 21</em>(5), 1295–1305.</li>
+        <li>Lo, S. J., Chapman, P., et al. (2022). CLEAR VR Phase 2: A pilot randomized crossover trial. <em>The Cleft Palate Craniofacial Journal.</em></li>
+        <li>中国卫生健康年鉴编纂委员会. (2023). <em>中国卫生健康年鉴 2023</em>. 中国协和医科大学出版社.（2022 年儿科住院手术 127 万人次）</li>
+      </ol>
+      <p class="refs-note">注：完整 DOI / 链接已在项目文档中保存。正式提交报告时请按 APA / GB/T 7714 规范统一排版。网页仅作展示与证据支撑材料，数字均以原始文献为准。</p>
     </div>
   </div>
 </section>
@@ -993,6 +1088,30 @@ if(dc && window.echarts){
   window.addEventListener('resize',resize);
 }
 
+/* ---------- 个体化内容理解率对比图 ---------- */
+var undChartEl=document.getElementById('understandChart');
+if(undChartEl && window.echarts){
+  var uchart=echarts.init(undChartEl);
+  var udata=[
+    {name:'病灶范围理解率',before:70,after:100},
+    {name:'病灶位置理解率',before:65,after:95}
+  ];
+  uchart.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'#fff',borderColor:'#e7ded2',textStyle:{color:'#2b3a3d',fontSize:12},axisPointer:{type:'shadow'}},
+    legend:{data:['使用前（传统告知）','个体化三维内容'],bottom:0,textStyle:{color:'#8a9a99'}},
+    grid:{left:'8%',right:'8%',top:'14%',bottom:'16%'},
+    xAxis:{type:'category',data:udata.map(function(d){return d.name;}),axisLine:{lineStyle:{color:'#d8ccc0'}},axisLabel:{color:'#2b3a3d',fontSize:12}},
+    yAxis:{type:'value',min:0,max:100,axisLabel:{color:'#8a9a99'},splitLine:{lineStyle:{color:'#f0e8dc'}}},
+    series:[
+      {name:'使用前（传统告知）',type:'bar',barWidth:34,data:udata.map(function(d){return d.before;}),itemStyle:{color:'#cfc3b2',borderRadius:[6,6,0,0]}},
+      {name:'个体化三维内容',type:'bar',barWidth:34,data:udata.map(function(d){return d.after;}),itemStyle:{color:'#3fa7a8',borderRadius:[6,6,0,0]},
+        label:{show:true,position:'top',formatter:function(p){return p.value+'%';},color:'#2b3a3d',fontWeight:600}}
+    ]
+  });
+  function uresize(){uchart.resize();}
+  window.addEventListener('resize',uresize);
+}
+
 /* ---------- Hero 全息粒子动画 ---------- */
 var canvas=document.getElementById('heroCanvas');
 if(canvas){
@@ -1095,16 +1214,19 @@ tabs.forEach(function(t){
 
 /* ---------- KPI 数字滚动计数 ---------- */
 var counted=false;
+function fmt(n){
+  return n.toLocaleString('en-US');
+}
 function animateCount(el){
-  var target=parseInt(el.getAttribute('data-count'),10)||0;
+  var target=parseInt(el.getAttribute('data-count').replace(/,/g,''),10)||0;
   var dur=1200,start=null;
   function step(ts){
     if(!start)start=ts;
     var p=Math.min((ts-start)/dur,1);
     var eased=1-Math.pow(1-p,3);
-    el.textContent=Math.round(target*eased);
+    el.textContent=fmt(Math.round(target*eased));
     if(p<1){requestAnimationFrame(step);}
-    else{el.textContent=target;}
+    else{el.textContent=fmt(target);}
   }
   requestAnimationFrame(step);
 }
@@ -1119,6 +1241,16 @@ var kpiObs=new IntersectionObserver(function(entries){
 },{threshold:.4});
 var kpiSection=document.getElementById('kpi');
 if(kpiSection){kpiObs.observe(kpiSection);}
+
+/* ---------- 参考文献折叠 ---------- */
+var refToggle=document.querySelector('.ref-toggle');
+var refList=document.getElementById('refList');
+if(refToggle&&refList){
+  refToggle.addEventListener('click',function(){
+    var open=refList.classList.toggle('open');
+    refToggle.setAttribute('aria-expanded',open?'true':'false');
+  });
+}
 
 /* ---------- 平滑锚点滚动（含导航栏偏移） ---------- */
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
