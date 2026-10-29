@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AR儿童术前可视化宣教系统 · 未来工作与人力趋势研究</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231e4a54'/%3E%3Cpath d='M20 32a12 12 0 0 1 24 0M20 32a12 12 0 0 0 24 0M32 20v24' stroke='%236fc4c0' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23f09a72'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23eaf4f2'/%3E%3Ccircle cx='32' cy='32' r='30' fill='none' stroke='%233fa7a8' stroke-width='4'/%3E%3Cpath d='M32 18v28M18 32h28' stroke='%233fa7a8' stroke-width='7' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23f09a72'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
@@ -48,7 +48,7 @@ section{position:relative}
 }
 .topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--deep);font-weight:500;font-size:14px;letter-spacing:.02em}
-.brand .logo{width:30px;height:30px;flex:none}
+.brand .logo{width:34px;height:34px;flex:none;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(42,77,79,.12)}
 .navlinks{display:none;gap:22px;font-size:13.5px;color:var(--ink-soft)}
 .navlinks a{transition:color .2s}
 .navlinks a:hover{color:var(--teal)}
@@ -87,6 +87,19 @@ section{position:relative}
   padding:7px 16px;margin-bottom:26px;background:rgba(255,255,255,.5);
 }
 .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--apricot);box-shadow:0 0 10px rgba(240,154,114,.7)}
+/* ---- Hero 学术署名条 ---- */
+.hero-accred{
+  display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:26px;
+  background:rgba(255,255,255,.66);border:1px solid rgba(63,167,168,.28);
+  border-radius:16px;padding:12px 18px;width:fit-content;max-width:100%;
+  box-shadow:0 8px 24px rgba(42,77,79,.06);
+}
+.hero-accred .alogo{height:34px;width:auto;display:block;object-fit:contain}
+.hero-accred .alogo.col{height:26px}
+.hero-accred .adiv{width:1px;height:30px;background:rgba(63,167,168,.4);flex:none}
+.hero-accred .atext{display:flex;flex-direction:column;gap:1px;line-height:1.35}
+.hero-accred .atext b{font-size:13px;color:var(--deep);letter-spacing:.04em}
+.hero-accred .atext span{font-size:11px;color:var(--muted);letter-spacing:.08em}
 .hero h1{
   font-size:clamp(30px,5.6vw,58px);
   font-weight:900;line-height:1.18;letter-spacing:.01em;
@@ -280,12 +293,25 @@ section{position:relative}
 .btn-primary:hover{box-shadow:0 8px 26px rgba(63,167,168,.4)}
 .btn-ghost{background:transparent;color:#d8ecf4;border:1px solid rgba(167,222,216,.4)}
 .btn-ghost:hover{background:rgba(63,167,168,.08)}
+/* ---- 结语落款（出品方署名） ---- */
+.closing-credit{
+  margin-top:34px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  opacity:.92;
+}
+.closing-credit .clogo{height:30px;width:auto;object-fit:contain;background:#fff;border-radius:8px;padding:3px 6px;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.closing-credit .clogo.col{height:24px}
+.closing-credit .cc-div{width:1px;height:26px;background:rgba(167,222,216,.45)}
+.closing-credit .cc-txt{display:flex;flex-direction:column;line-height:1.4}
+.closing-credit .cc-txt b{font-size:12.5px;color:#d8ecf4;letter-spacing:.05em;font-weight:600}
+.closing-credit .cc-txt span{font-size:10.5px;color:rgba(216,236,244,.7);letter-spacing:.08em}
 
 /* ===== 页脚 ===== */
 footer{background:#173a42;color:#7fa3b6;padding:40px 0;font-size:13px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
 footer .f-brand{color:#cfe4ee;font-weight:600}
 footer span{line-height:1.8}
+footer .f-logos{display:flex;align-items:center;gap:12px}
+footer .f-logos img{height:26px;width:auto;object-fit:contain;background:#fff;border-radius:6px;padding:2px 5px}
 
 /* ===== 动效 ===== */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
@@ -426,7 +452,7 @@ footer span{line-height:1.8}
 <nav class="topnav" id="topnav">
   <div class="wrap">
     <div class="brand">
-      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#1e4a54" stroke="var(--teal)" stroke-width="2"/><path d="M20 32a12 12 0 0 1 24 0M20 32a12 12 0 0 0 24 0M32 20v24" stroke="#6fc4c0" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="32" r="4" fill="#f09a72"/></svg>
+      <img class="logo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/VQtvbMCNUoveSHxEnF9cBNfOnBf" alt="AR 术前宣教系统 logo">
       <span>AR 术前可视化宣教 · 未来工作研究</span>
     </div>
     <div class="navlinks">
@@ -460,6 +486,13 @@ footer span{line-height:1.8}
   <canvas class="hero-canvas" id="heroCanvas"></canvas>
   <div class="wrap">
     <div class="eyebrow reveal in"><span class="dot"></span>INT6141 · 工作与人力的未来趋势 · 新兴科技赋能未来人力（ETFW）</div>
+    <div class="hero-accred reveal in">
+      <img class="alogo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ZB4lbttmPokS3nxSouXcefmQnnc" alt="香港教育大学校徽">
+      <span class="adiv"></span>
+      <img class="alogo col" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/W1uebFFDNoQ6GHxryEYcBv8YnPc" alt="应用政策研究及教育未来学院院徽">
+      <span class="adiv"></span>
+      <span class="atext"><b>香港教育大学 · 应用政策研究及教育未来学院</b><span>Academy for Applied Policy Studies and Education Futures</span></span>
+    </div>
     <h1 class="reveal in">AR 儿童术前<span class="accent">可视化宣教</span>系统<br>让严肃的术前告知，成为孩子看得懂的陪伴</h1>
     <p class="sub reveal in">以增强现实（AR）三维交互，把手术结构与流程直观呈现给患儿与家长——降低理解门槛、缓解术前焦虑，同时把医护从重复宣教中解放出来。这是一次关于"数字技术如何重塑临床岗位与医患沟通"的未来工作研究。</p>
     <div class="theme reveal in">
@@ -1081,12 +1114,23 @@ footer span{line-height:1.8}
       <a class="btn btn-primary" href="#decomp">查看问题分解</a>
       <a class="btn btn-ghost" href="#solution">了解解决方案</a>
     </div>
+    <div class="closing-credit reveal">
+      <img class="clogo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ZB4lbttmPokS3nxSouXcefmQnnc" alt="香港教育大学校徽">
+      <span class="cc-div"></span>
+      <img class="clogo col" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/W1uebFFDNoQ6GHxryEYcBv8YnPc" alt="应用政策研究及教育未来学院院徽">
+      <span class="cc-div"></span>
+      <span class="cc-txt"><b>香港教育大学 · 应用政策研究及教育未来学院</b><span>Academy for Applied Policy Studies and Education Futures · INT6141</span></span>
+    </div>
   </div>
 </section>
 
 <!-- ===== 页脚 ===== -->
 <footer>
   <div class="wrap">
+    <div class="f-logos">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ZB4lbttmPokS3nxSouXcefmQnnc" alt="香港教育大学校徽">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/W1uebFFDNoQ6GHxryEYcBv8YnPc" alt="应用政策研究及教育未来学院院徽">
+    </div>
     <div class="f-brand">AR 儿童术前可视化宣教系统</div>
     <span>香港教育大学 · 应用政策研究及教育未来学院（AAPSEF）<br>INT6141 工作与人力的未来趋势 · 新兴科技赋能未来人力（ETFW）</span>
   </div>
