@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AR 科普手册 · 小熊术前小课堂</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='20' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='44' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='32' cy='36' r='22' fill='%23d99a68'/%3E%3Ccircle cx='24' cy='32' r='3' fill='%233a2a1a'/%3E%3Ccircle cx='40' cy='32' r='3' fill='%233a2a1a'/%3E%3Cellipse cx='32' cy='42' rx='8' ry='6' fill='%23f3d9b8'/%3E%3C/svg%3E">
+<style>
+:root{
+  --sky:#bfe6f5;--sky-deep:#5db4dd;--sun:#ffd166;--coral:#ff8a70;--mint:#7fd8be;
+  --grape:#a78bfa;--ink:#3d4f5c;--ink-soft:#6b7f8c;--cream:#fff8ee;--card:#fff;
+  --line:#f0e4d3;--shadow:0 12px 32px rgba(93,140,160,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:80px}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+
+.topnav{position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(255,251,242,.92);backdrop-filter:blur(10px);border-bottom:2px dashed rgba(93,180,221,.4)}
+.topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:#4a6275}
+.brand svg{width:34px;height:34px}
+.top-links{display:flex;gap:6px}
+.top-links a{font-size:13.5px;font-weight:700;padding:8px 14px;border-radius:999px;color:var(--ink-soft);transition:.2s}
+.top-links a:hover,.top-links a.here{background:rgba(93,180,221,.28);color:var(--ink)}
+@media(max-width:680px){.top-links{display:none}}
+
+/* ===== Hero ===== */
+.page-hero{background:linear-gradient(170deg,#cfe9f8,#e3f2fb 60%,#fff8ee);padding:104px 0 54px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.page-hero h1{font-size:clamp(26px,4vw,40px);font-weight:900;color:#2e6f94;line-height:1.35}
+.page-hero h1 .hi{color:var(--coral)}
+.hero-lead{margin-top:16px;font-size:16px;color:var(--ink-soft)}
+.hero-qa{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.hq{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:16px;padding:12px 16px;border:2px solid var(--line);box-shadow:var(--shadow)}
+.hq i{font-style:normal;flex:none;font-size:17px}
+.hq b{font-size:14px;color:#33526b}
+.hq span{font-size:13.5px;color:var(--ink-soft)}
+.hero-visual{border-radius:28px;overflow:hidden;box-shadow:0 18px 40px rgba(51,82,107,.22);border:4px solid #fff;background:#e9f6fd;animation:heroFloat 6s ease-in-out infinite}
+.hero-visual img{display:block;width:100%}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-hint{text-align:center;font-size:12.5px;color:#5a86a0;font-weight:700;margin-top:10px}
+@media(prefers-reduced-motion:reduce){.hero-visual{animation:none}}
+
+/* ===== 章节通用 ===== */
+section.chap{padding:64px 0}
+.chap-alt{background:#fdf3e4}
+.chap-head{text-align:center;max-width:680px;margin:0 auto 38px}
+.chap-head .kicker{display:inline-block;font-size:14px;font-weight:800;letter-spacing:.1em;border-radius:999px;padding:7px 18px;margin-bottom:12px}
+.chap-head h2{font-size:clamp(23px,3.4vw,34px);font-weight:900;color:#33526b}
+.chap-head p{margin-top:10px;color:var(--ink-soft);font-size:15px}
+.k-sky{background:rgba(93,180,221,.3);color:#2e6f94}
+.k-coral{background:rgba(255,138,112,.3);color:#a04a33}
+.k-mint{background:rgba(127,216,190,.4);color:#2e7a63}
+.k-sun{background:rgba(255,209,102,.4);color:#8a6a1f}
+.k-grape{background:rgba(167,139,250,.3);color:#5b3fa8}
+
+/* ===== AR 实时预览模拟器 ===== */
+.sim{max-width:880px;margin:0 auto;background:linear-gradient(180deg,#3c4c5a,#2b3742);border-radius:34px;padding:16px 16px 18px;box-shadow:0 24px 56px rgba(40,58,70,.38)}
+.sim-screen{position:relative;border-radius:18px;overflow:hidden;background:#e9f6fd}
+.sim-screen img.room{display:block;width:100%}
+.sim-status{position:absolute;left:12px;bottom:12px;background:rgba(35,50,62,.8);color:#fff;font-size:12.5px;font-weight:700;padding:7px 16px;border-radius:99px;backdrop-filter:blur(4px);max-width:92%}
+.sim-scanline{position:absolute;left:5%;right:5%;height:4px;top:0;border-radius:99px;background:linear-gradient(90deg,transparent,#ffd166 30%,#ff8a70 50%,#ffd166 70%,transparent);opacity:0;box-shadow:0 0 18px rgba(255,209,102,.85);pointer-events:none}
+.sim.scanning .sim-scanline{opacity:1;animation:scanmove 1.7s ease-in-out 2}
+@keyframes scanmove{0%{top:8%}50%{top:84%}100%{top:8%}}
+.sim-corner{position:absolute;width:24px;height:24px;border:3.5px solid rgba(255,209,102,.95);opacity:0;transition:.3s;pointer-events:none}
+.sc1{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:10px 0 0 0}
+.sc2{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 10px 0 0}
+.sc3{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 10px}
+.sc4{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 10px 0}
+.sim.scanning .sim-corner{opacity:1}
+/* 全息层 */
+.sim-holo{position:absolute;left:30%;top:4%;width:40%;opacity:0;transform:translateY(16px) scale(.92);transition:opacity .7s ease,transform .7s ease;pointer-events:none}
+.sim.ar .sim-holo{opacity:1;transform:none}
+.sim-holo svg{display:block;width:100%;filter:drop-shadow(0 0 16px rgba(93,180,221,.6));animation:holofloat 4.5s ease-in-out infinite}
+@keyframes holofloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(prefers-reduced-motion:reduce){.sim-holo svg{animation:none}}
+.hlabel{cursor:pointer;pointer-events:auto}
+.hlabel line{stroke:#5db4dd;stroke-width:1.6;stroke-dasharray:3 3}
+.hlabel rect{fill:rgba(255,255,255,.95);stroke:#5db4dd;stroke-width:1.6;rx:9;transition:.2s}
+.hlabel text{font-size:10.5px;font-weight:800;fill:#33526b}
+.hlabel .hl-dot{fill:#ffd166;stroke:#f0b429;stroke-width:1.5}
+.hlabel{animation:lblpulse 2.8s ease-in-out infinite}
+.hlabel[data-i="1"]{animation-delay:.9s}
+.hlabel[data-i="2"]{animation-delay:1.8s}
+.hlabel:hover rect,.hlabel.sel rect{stroke:var(--coral);fill:#fff}
+.hlabel:hover .hl-dot,.hlabel.sel .hl-dot{fill:var(--coral);stroke:#d96a4e}
+@keyframes lblpulse{0%,100%{opacity:.62}50%{opacity:1}}
+/* 模拟器底部控制条 */
+.sim-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;padding:0 4px}
+.sim-toggle{display:flex;background:rgba(255,255,255,.12);border-radius:999px;padding:4px}
+.sim-toggle button{border:none;background:transparent;color:#cfe3ee;font-size:13px;font-weight:800;padding:8px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+.sim-toggle button.on{background:var(--sun);color:#6b4e0f}
+.sim-organs{display:flex;gap:6px;flex-wrap:wrap}
+.sim-organs button{border:1.5px solid rgba(255,255,255,.28);background:transparent;color:#cfe3ee;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.2s}
+.sim-organs button.on{background:rgba(93,180,221,.4);border-color:var(--sky-deep);color:#fff}
+.sim-rescan{margin-left:auto;border:none;cursor:pointer;font-size:13px;font-weight:800;color:#6b4e0f;background:var(--sun);border-radius:999px;padding:9px 18px;box-shadow:0 6px 16px rgba(255,209,102,.4);transition:.2s}
+.sim-rescan:hover{transform:translateY(-2px)}
+.sim-info{margin-top:12px;background:rgba(255,255,255,.1);border:1.5px dashed rgba(255,255,255,.3);border-radius:16px;padding:13px 18px}
+.sim-info b{color:var(--sun);font-size:14.5px}
+.sim-info p{font-size:13px;margin-top:4px;color:#cfe3ee}
+.sim-tip{text-align:center;font-size:13px;font-weight:700;color:#5a86a0;margin-top:14px}
+@media(max-width:620px){.sim{border-radius:24px;padding:10px 10px 12px}.sim-bar{gap:8px}.sim-rescan{margin-left:0;width:100%}.sim-status{font-size:11px}}
+
+/* ===== 30 秒演示动画 ===== */
+.film-box{max-width:720px;margin:0 auto;background:linear-gradient(180deg,#3c4c5a,#2b3742);border-radius:32px;padding:14px 14px 16px;box-shadow:0 24px 56px rgba(40,58,70,.38)}
+.film-frame{border-radius:20px;overflow:hidden;background:#7ec8e8}
+.film-frame video{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.film-marks{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:13px}
+.film-marks span{font-size:12px;font-weight:800;color:#ffe9b8}
+.film-marks i{width:22px;height:2px;border-radius:2px;background:rgba(255,233,184,.4)}
+.film-cap{text-align:center;font-size:13px;font-weight:700;color:#cfe3ee;margin-top:9px}
+@media(max-width:520px){.film-marks{gap:6px}.film-marks i{width:12px}}
+
+/* ===== 数据卡 ===== */
+.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:760px){.data-grid{grid-template-columns:1fr}}
+.d-card{background:#fff;border-radius:24px;padding:26px;border:2px solid var(--line);box-shadow:var(--shadow);text-align:center}
+.d-card .d-num{font-size:38px;font-weight:900;color:var(--coral);line-height:1.1}
+.d-card b{display:block;font-size:15.5px;color:#33526b;margin-top:10px}
+.d-card p{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.d-src{font-size:11px;color:#9ab3c2;margin-top:10px}
+.conclude{max-width:760px;margin:30px auto 0;background:linear-gradient(135deg,#e8f6fb,#f0fbf3);border:2px dashed rgba(127,216,190,.6);border-radius:24px;padding:24px 28px;text-align:center}
+.conclude b{color:#2e7a63;font-size:16px}
+.conclude p{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+/* ===== 六步流程 ===== */
+.flow-line{position:relative;max-width:880px;margin:0 auto}
+.flow-line::before{content:"";position:absolute;left:27px;top:10px;bottom:10px;width:5px;border-radius:99px;background:linear-gradient(180deg,var(--sun),var(--mint),var(--sky-deep))}
+@media(max-width:760px){.flow-line::before{display:none}}
+.fstep{position:relative;display:grid;grid-template-columns:60px 1fr;gap:20px;padding:22px 0}
+@media(max-width:760px){.fstep{grid-template-columns:1fr}}
+.fs-dot{position:relative;z-index:2;width:58px;height:58px;border-radius:50%;background:#fff;border:4px solid var(--sun);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 18px rgba(255,209,102,.35)}
+.fstep:nth-child(2) .fs-dot{border-color:var(--mint)}
+.fstep:nth-child(3) .fs-dot{border-color:var(--sky-deep)}
+.fstep:nth-child(4) .fs-dot{border-color:var(--grape)}
+.fstep:nth-child(5) .fs-dot{border-color:var(--coral)}
+.fstep:nth-child(6) .fs-dot{border-color:var(--sun)}
+.fs-body{background:#fff;border-radius:26px;border:2px solid var(--line);box-shadow:var(--shadow);overflow:hidden}
+@media(min-width:761px){.fstep:nth-child(even) .fs-body{direction:rtl}.fstep:nth-child(even) .fs-inner{direction:ltr}}
+.fs-inner{display:grid;grid-template-columns:220px 1fr;direction:ltr}
+@media(max-width:700px){.fs-inner{grid-template-columns:1fr}}
+.fs-art{height:100%;min-height:160px;position:relative}
+.fs-art img{display:block;width:100%;height:100%;object-fit:cover}
+.fs-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 72%,rgba(255,255,255,.9));pointer-events:none}
+.fs-txt{padding:20px 24px}
+.fs-txt .fs-who{display:inline-block;font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 12px;margin-bottom:8px}
+.who-doc{background:rgba(93,180,221,.18);color:#2e6f94}
+.who-fam{background:rgba(255,209,102,.3);color:#8a6a1f}
+.who-both{background:rgba(127,216,190,.3);color:#2e7a63}
+.fs-txt b{display:block;font-size:17.5px;color:#33526b}
+.fs-txt p{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+.fs-txt .fs-see{margin-top:10px;font-size:12.5px;font-weight:700;color:#a04a33;background:rgba(255,138,112,.14);border-radius:12px;padding:8px 12px;display:inline-block}
+
+/* ===== 三大模块 ===== */
+.mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:860px){.mod-grid{grid-template-columns:1fr}}
+.mod{background:#fff;border-radius:26px;box-shadow:var(--shadow);border:2px solid var(--line);padding:26px 24px;cursor:pointer;text-align:center;transition:.22s}
+.mod:hover{transform:translateY(-6px);border-color:var(--grape)}
+.mod .m-emoji{font-size:44px}
+.mod b{display:block;font-size:17px;color:#33526b;margin-top:10px}
+.mod p{font-size:13px;color:var(--ink-soft);margin-top:6px;min-height:56px}
+.mod .m-open{display:inline-block;margin-top:12px;font-size:13px;font-weight:800;color:#5b3fa8;background:rgba(167,139,250,.18);border-radius:99px;padding:7px 18px}
+.modal-mask{position:fixed;inset:0;background:rgba(51,82,107,.5);z-index:90;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-mask.show{display:flex}
+.modal{background:#fff;border-radius:28px;max-width:560px;width:100%;max-height:82vh;overflow-y:auto;padding:32px 30px;position:relative;animation:mup .3s ease}
+@keyframes mup{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.modal .m-close{position:absolute;top:16px;right:18px;border:none;background:#f3ede2;width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;color:#6b7f8c}
+.modal .m-emoji{font-size:42px}
+.modal h3{font-size:20px;font-weight:900;color:#33526b;margin-top:10px}
+.modal p{font-size:14.5px;color:var(--ink-soft);margin-top:12px}
+.modal ul{margin-top:12px;padding-left:20px}
+.modal li{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+/* ===== 锦囊 ===== */
+.tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.tips-grid{grid-template-columns:1fr}}
+.tip-col{border-radius:26px;padding:24px;border:2px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+.tip-col.good{border-color:rgba(127,216,190,.6)}
+.tip-col.bad{border-color:rgba(255,138,112,.45)}
+.tip-col h3{font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px}
+.tip-col.good h3{color:#2e7a63}
+.tip-col.bad h3{color:#a04a33}
+.tip-col ul{margin-top:12px;padding-left:4px;list-style:none}
+.tip-col li{font-size:14px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
+.tip-col li i{font-style:normal;flex:none;font-size:15px}
+
+/* ===== 安全 ===== */
+.safe{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.safe-row{display:flex;gap:14px;background:#fff;border-radius:22px;border:2px solid var(--line);box-shadow:var(--shadow);padding:18px 22px;align-items:flex-start}
+.safe-row .s-emoji{font-size:28px;flex:none}
+.safe-row b{font-size:15px;color:#33526b}
+.safe-row p{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
+
+/* ===== 证书 ===== */
+.cert-zone{max-width:640px;margin:0 auto;background:#fff;border-radius:30px;box-shadow:var(--shadow);border:3px solid rgba(93,180,221,.35);padding:34px 30px;text-align:center}
+.read-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 4px}
+.read-chips .chip{font-size:12.5px;font-weight:700;color:var(--ink-soft);background:#f6efe2;border-radius:99px;padding:6px 14px;cursor:pointer;transition:.2s;border:2px solid transparent}
+.read-chips .chip.on{background:#effcf7;color:#1f5c4a;border-color:var(--mint)}
+.cert-form{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.cert-form input{font-size:15px;font-weight:700;border:2px solid var(--line);border-radius:14px;padding:12px 16px;outline:none;width:200px;text-align:center}
+.cert-form input:focus{border-color:var(--sky-deep)}
+.cert-form button{border:none;cursor:pointer;background:var(--sky-deep);color:#fff;font-size:15px;font-weight:800;border-radius:14px;padding:12px 26px;box-shadow:0 8px 18px rgba(93,180,221,.4)}
+.cert{display:none;margin:24px auto 0;max-width:520px;border:3px double var(--sky-deep);border-radius:20px;padding:28px 24px;background:linear-gradient(170deg,#f2fafe,#fff);position:relative}
+.cert::before{content:"🏅";position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:40px}
+.cert h3{font-size:21px;font-weight:900;color:#2e6f94}
+.cert .c-name{font-size:18px;font-weight:900;color:#a04a33;margin-top:12px;border-bottom:2px dashed var(--line);display:inline-block;padding:0 20px 4px}
+.cert p{font-size:13.5px;color:var(--ink-soft);margin-top:10px}
+
+.closing{background:linear-gradient(160deg,#5db4dd,#a78bfa);color:#fff;text-align:center;padding:54px 0}
+.closing h2{font-size:clamp(22px,3.2vw,32px);font-weight:900;text-shadow:0 2px 8px rgba(46,111,148,.3)}
+.closing p{margin-top:12px;font-size:14.5px;color:#eef5ff}
+footer{background:#33526b;color:#b9d2df;padding:28px 0;font-size:13px;text-align:center}
+footer b{color:#e6f3f9}
+footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:680px;margin:8px auto 0}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="14" r="9" fill="#c98a5b"/><circle cx="46" cy="14" r="9" fill="#c98a5b"/><circle cx="32" cy="36" r="22" fill="#d99a68"/><circle cx="24" cy="32" r="3" fill="#3a2a1a"/><circle cx="40" cy="32" r="3" fill="#3a2a1a"/><ellipse cx="32" cy="43" rx="8" ry="6" fill="#f3d9b8"/><path d="M28 43q4 4 8 0" stroke="#3a2a1a" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <span>小熊术前小课堂</span>
+    </a>
+    <div class="top-links">
+      <a href="index.html">🏠 首页</a>
+      <a href="kid.html">🧒 小朋友</a>
+      <a href="parent.html">👨‍👩‍👧 家长</a>
+      <a href="ar.html" class="here">📱 AR手册</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="page-hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>一台平板，把手术<br><span class="hi">"摆"在孩子和家长面前</span></h1>
+      <p class="hero-lead">这是<b>「小熊术前小课堂」AR 宣教系统</b>的使用说明书。它用在<b>儿科入院 / 术前门诊的宣教环节</b>：医生评估后，全家一起用平板看一场 10 分钟左右的互动讲解，把身体结构、手术流程、术前术后要求一次看明白。</p>
+      <div class="hero-qa">
+        <div class="hq"><i>👤</i><div><b>给谁用？</b><br><span>要手术的孩子和家长为主，儿科医护负责启动和答疑。</span></div></div>
+        <div class="hq"><i>⏰</i><div><b>什么时候用？</b><br><span>术前宣教环节——医生本来就要口头讲解术前告知的那段时间。</span></div></div>
+        <div class="hq"><i>🎯</i><div><b>解决什么？</b><br><span>口头讲一遍记不住、医学名词听不懂、孩子害怕又说不出口。</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="hero-visual">
+        <img src="assets/ar_hero.webp" alt="病房里医护、孩子与家长围着平板看悬浮的身体三维模型">
+      </div>
+      <p class="hero-hint">🧸 往下看，这个画面可以亲手操作</p>
+    </div>
+  </div>
+</header>
+
+<!-- ===== AR 实时预览模拟器 ===== -->
+<section class="chap chap-alt" id="demo">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-sky">📱 AR 实时预览</span>
+      <h2>亲手试一试：这就是宣教时屏幕里的画面</h2>
+      <p>① 先点「AR 视角」感受差别 → ② 点「重新扫卡」看模型怎么被加载 → ③ 点模型上发光的标签看讲解。</p>
+    </div>
+    <div class="sim reveal" id="sim">
+      <div class="sim-screen">
+        <img class="room" src="assets/sim_room.webp" alt="病房摄像头视角：戴AR眼镜的孩子坐在床上，桌上有平板和识别卡，妈妈在旁">
+        <!-- 全息模型层 -->
+        <div class="sim-holo" id="simHolo">
+          <svg viewBox="0 0 300 240">
+            <defs>
+              <radialGradient id="hbase"><stop offset="0" stop-color="rgba(93,180,221,.35)"/><stop offset="1" stop-color="rgba(93,180,221,0)"/></radialGradient>
+            </defs>
+            <ellipse cx="150" cy="122" rx="88" ry="96" fill="url(#hbase)"/>
+            <!-- 喉咙 -->
+            <g id="holo-throat">
+              <rect x="136" y="74" width="26" height="76" rx="13" fill="rgba(91,190,224,.6)" stroke="#5db4dd" stroke-width="2.5"/>
+              <path d="M141 82h16M141 96h16M141 110h16M141 124h16" stroke="rgba(255,255,255,.7)" stroke-width="2"/>
+              <ellipse cx="150" cy="62" rx="30" ry="17" fill="rgba(167,139,250,.5)" stroke="#a78bfa" stroke-width="2.5"/>
+              <circle cx="139" cy="62" r="8.5" fill="rgba(255,138,112,.85)"/>
+              <circle cx="161" cy="62" r="8.5" fill="rgba(255,138,112,.85)"/>
+              <g class="hlabel" data-i="0"><line x1="139" y1="55" x2="86" y2="26"/><rect x="8" y="12" width="80" height="26" rx="9"/><circle class="hl-dot" cx="139" cy="55" r="4.5"/><text x="48" y="28" text-anchor="middle">会厌岔路口</text></g>
+              <g class="hlabel" data-i="1"><line x1="161" y1="66" x2="212" y2="42"/><rect x="208" y="28" width="86" height="26" rx="9"/><circle class="hl-dot" cx="161" cy="66" r="4.5"/><text x="251" y="44" text-anchor="middle">扁桃体老家</text></g>
+              <g class="hlabel" data-i="2"><line x1="149" y1="132" x2="92" y2="170"/><rect x="8" y="156" width="86" height="26" rx="9"/><circle class="hl-dot" cx="149" cy="132" r="4.5"/><text x="51" y="172" text-anchor="middle">声带小琴弦</text></g>
+            </g>
+            <!-- 心脏 -->
+            <g id="holo-heart" style="display:none">
+              <path d="M150 168c-26-20-56-44-56-74a31 31 0 0 1 56-18 31 31 0 0 1 56 18c0 30-30 54-56 74z" fill="rgba(255,138,112,.55)" stroke="#ff8a70" stroke-width="3"/>
+              <path d="M124 82q10-16 24-10M152 82q10-16 24-10" stroke="#ff8a70" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M132 108q18 12 36 0" stroke="rgba(255,255,255,.75)" stroke-width="2.5" fill="none"/>
+              <g class="hlabel" data-i="0"><line x1="150" y1="112" x2="88" y2="60"/><rect x="8" y="46" width="82" height="26" rx="9"/><circle class="hl-dot" cx="150" cy="112" r="4.5"/><text x="49" y="62" text-anchor="middle">心室小水泵</text></g>
+              <g class="hlabel" data-i="1"><line x1="176" y1="92" x2="216" y2="66"/><rect x="212" y="52" width="82" height="26" rx="9"/><circle class="hl-dot" cx="176" cy="92" r="4.5"/><text x="253" y="68" text-anchor="middle">瓣膜小阀门</text></g>
+              <g class="hlabel" data-i="2"><line x1="150" y1="152" x2="94" y2="184"/><rect x="8" y="170" width="88" height="26" rx="9"/><circle class="hl-dot" cx="150" cy="152" r="4.5"/><text x="52" y="186" text-anchor="middle">营养小水管</text></g>
+            </g>
+            <!-- 胃 -->
+            <g id="holo-stomach" style="display:none">
+              <path d="M118 66q-10 44 18 66t56-6q22-24 2-52-16-22-34-16-10 3-8 14 3 20-12 24-14 4-22-30z" fill="rgba(255,209,102,.6)" stroke="#f0b429" stroke-width="3"/>
+              <path d="M196 128q16 4 14 22" stroke="#f0b429" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M112 62q16-12 34-4" stroke="rgba(255,255,255,.75)" stroke-width="2.5" fill="none"/>
+              <g class="hlabel" data-i="0"><line x1="132" y1="96" x2="86" y2="52"/><rect x="8" y="38" width="80" height="26" rx="9"/><circle class="hl-dot" cx="132" cy="96" r="4.5"/><text x="48" y="54" text-anchor="middle">胃酸工厂</text></g>
+              <g class="hlabel" data-i="1"><line x1="198" y1="140" x2="222" y2="160"/><rect x="212" y="148" width="82" height="26" rx="9"/><circle class="hl-dot" cx="198" cy="140" r="4.5"/><text x="253" y="164" text-anchor="middle">幽门安检门</text></g>
+              <g class="hlabel" data-i="2"><line x1="150" y1="140" x2="98" y2="178"/><rect x="8" y="164" width="92" height="26" rx="9"/><circle class="hl-dot" cx="150" cy="140" r="4.5"/><text x="54" y="180" text-anchor="middle">弹性搅拌袋</text></g>
+            </g>
+          </svg>
+        </div>
+        <div class="sim-scanline"></div>
+        <span class="sim-corner sc1"></span><span class="sim-corner sc2"></span><span class="sim-corner sc3"></span><span class="sim-corner sc4"></span>
+        <div class="sim-status" id="simStatus">📷 普通视角 · 这是病房原本的样子</div>
+      </div>
+      <div class="sim-bar">
+        <div class="sim-toggle">
+          <button id="viewNormal" class="on">📷 普通视角</button>
+          <button id="viewAR">✨ AR 视角</button>
+        </div>
+        <div class="sim-organs" id="simOrgans">
+          <button data-o="throat" class="on">🎤 小喉咙</button>
+          <button data-o="heart">❤️ 心脏</button>
+          <button data-o="stomach">🍚 胃</button>
+        </div>
+        <button class="sim-rescan" id="rescanBtn">🔄 重新扫卡</button>
+      </div>
+      <div class="sim-info">
+        <b id="simInfoTitle">👆 点击模型上发光的标签</b>
+        <p id="simInfoText">每个标签对应一段讲解——真实系统里，孩子点哪里，哪里就会"活"起来。</p>
+      </div>
+    </div>
+    <p class="sim-tip">🧸 小贴士：真实系统用的是平板摄像头 + 识别卡，小朋友还可以戴轻量观影眼镜看，随时可以摘下来。</p>
+  </div>
+</section>
+
+<!-- ===== 30 秒演示动画 ===== -->
+<section class="chap" id="film">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-sun">🎬 30 秒演示</span>
+      <h2>一段动画，看完整场宣教</h2>
+      <p>从医生递上平板、孩子戴上轻量眼镜，到模型浮现、亲手互动，再到家长核对清单、医生答疑——完整流程一次看全。</p>
+    </div>
+    <div class="film-box reveal">
+      <div class="film-frame">
+        <video src="assets/ar_flow30.mp4" controls playsinline preload="metadata" poster="assets/ar_hero.webp"></video>
+      </div>
+      <div class="film-marks">
+        <span>🩺 启动与佩戴</span><i></i>
+        <span>🪄 扫卡与模型浮现</span><i></i>
+        <span>📋 核对与答疑</span>
+      </div>
+      <p class="film-cap">🧸 小熊提示：画面里的橙色眼镜是轻量观影眼镜，不是封闭式头显，孩子随时可以摘下来。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 为什么需要 ===== -->
+<section class="chap" id="why">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-coral">😟 为什么需要它</span>
+      <h2>不是没人讲，是讲的方式撑不住</h2>
+    </div>
+    <div class="data-grid">
+      <div class="d-card reveal"><span class="d-num">3–5 分钟</span><b>医生能分给每个家庭的时间</b><p>研究观察发现，术前等候区里麻醉医生平均在每个家庭只停留 3–5 分钟，外科医生约 3.5 分钟。</p><p class="d-src">MacLaren 等，2008</p></div>
+      <div class="d-card reveal"><span class="d-num">13.5%</span><b>"确认过禁食"却没做到</b><p>家长口头确认孩子已禁食，但仍有 13.5% 实际未达标；12%–22% 的家长误以为禁食时能吃饼干、麦片。</p><p class="d-src">Cantellow 等，2012</p></div>
+      <div class="d-card reveal"><span class="d-num">更少害怕</span><b>AR 讲故事被证实有效</b><p>针对 7–12 岁儿童的随机对照试验显示：用 AR 故事书做术前准备的孩子，恐惧评分下降明显大于普通故事书。</p><p class="d-src">Sekeler &amp; Karaarslan，2025</p></div>
+    </div>
+    <div class="conclude reveal">
+      <b>所以我们做了这件事 👇</b>
+      <p>把医生要讲的标准化内容，从"口头一遍过"变成"平板上看得见、点得动、能回看"的互动讲解——孩子看得懂，家长核对得清，医护不用每次从头讲。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 给家长的安心科学 ===== -->
+<section class="chap" id="calm">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-mint">💚 给家长的安心科学</span>
+      <h2>孩子术前的紧张，是可以被科学地安抚的</h2>
+      <p>这三条来自儿童医疗辅导（Child Life）领域的共识，也是我们整个系统设计的底层逻辑。</p>
+    </div>
+    <div class="data-grid">
+      <div class="d-card reveal"><span class="d-num">💚</span><b>恐惧大多来自"未知"</b><p>孩子怕的往往不是疼痛，而是陌生的房间、面罩和白大褂。研究证实：术前<b style="display:inline;font-size:inherit;color:inherit;margin:0">提前熟悉流程</b>能显著降低焦虑——看得越多，怕得越少。</p><p class="d-src">术前教育项目一致结论</p></div>
+      <div class="d-card reveal"><span class="d-num">🧑‍🤝‍🧑</span><b>情绪是会传染的</b><p>儿童的术前焦虑与家长焦虑高度相关。您表现得从容，孩子就多一分安心——而从容来自"心里有数"，这正是本系统想给您的。</p><p class="d-src">家长-儿童焦虑相关性研究</p></div>
+      <div class="d-card reveal"><span class="d-num">💬</span><b>说出来，记得住</b><p>让孩子把看到的讲给您听（" teach-back 复述法"），理解和记忆效果最好。孩子每讲一遍，勇气就多攒一分。</p><p class="d-src">健康教育复述法研究</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 六步流程 ===== -->
+<section class="chap chap-alt" id="flow">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-mint">🧭 完整使用流程</span>
+      <h2>在医院里的这六步，就是全部了</h2>
+      <p>从医生启动程序到答疑结束，一般安排在术前宣教环节，全程约 10 分钟。</p>
+    </div>
+    <div class="flow-line">
+      <div class="fstep reveal">
+        <div class="fs-dot">🩺</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/seg1.webp" alt="医生把平板递给病床上的孩子和妈妈">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-doc">👤 医护执行</span>
+            <b>第 1 步 · 医生启动宣教</b>
+            <p>医生完成术前评估后，选择对应手术类型的宣教模块，启动 AR 程序，把平板交给您和孩子。适合讲什么、讲到什么深度，由医生把关。</p>
+            <span class="fs-see">👀 注意看：设备是医生递过来的，不是孩子自己玩的</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="fstep reveal">
+        <div class="fs-dot">📷</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/flow_scan.webp" alt="平板扫描熊掌识别卡，三维模型即将浮现">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-both">👤 孩子和家长操作</span>
+            <b>第 2 步 · 扫一扫，模型"浮"出来</b>
+            <p>用平板对准桌上的识别卡轻轻一扫，对应身体部位的三维卡通模型就出现在屏幕里。不需要戴任何眼镜或头显。</p>
+            <span class="fs-see">👀 这一步最像"变魔法"，孩子一般会发出"哇"的声音</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="fstep reveal">
+        <div class="fs-dot">▶️</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/seg2.webp" alt="孩子戴AR眼镜看悬浮的三维模型">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-both">👤 一起观看</span>
+            <b>第 3 步 · 分步看器官和手术流程</b>
+            <p>戴上轻量 AR 观影眼镜（或直接看平板），跟着指引一步步看：这个部位长什么样、手术大致怎么做、会有什么感觉。每一步都可以暂停、重播，节奏由孩子掌握。</p>
+            <span class="fs-see">👀 看不懂就停下来——这不是任务，看多少算多少</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="fstep reveal">
+        <div class="fs-dot">👆</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/flow_touch.webp" alt="孩子伸出手指点击空中悬浮的发光模型">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-fam">👤 孩子主导</span>
+            <b>第 4 步 · 点一点，放大看</b>
+            <p>点模型上的任意位置会弹出标注说明，还可以切换视角、放大细节。从"被动听讲"变成"主动探索"，这是孩子最投入的环节。</p>
+            <span class="fs-see">👀 放手让孩子乱点——点错的代价是零，好奇心是无价的</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="fstep reveal">
+        <div class="fs-dot">📋</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/seg3.webp" alt="妈妈在平板上核对禁食清单，医生在旁讲解">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-fam">👤 家长重点参与</span>
+            <b>第 5 步 · 家长核对文字板块</b>
+            <p>动画看完了，还有给大人的文字板块：术前禁食时刻、陪护要求、术后护理、风险提示。内容标准化、可截图、可回看——解决"听过记不住"的问题。</p>
+            <span class="fs-see">👀 建议把禁食时刻截图，回家贴在冰箱上</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="fstep reveal">
+        <div class="fs-dot">💬</div>
+        <div class="fs-body"><div class="fs-inner">
+          <div class="fs-art">
+            <img src="assets/flow_ask.webp" alt="医生坐在床边为孩子和家长答疑，孩子抱着小熊玩偶">
+          </div>
+          <div class="fs-txt">
+            <span class="fs-who who-doc">👤 医护执行</span>
+            <b>第 6 步 · 医生补充答疑</b>
+            <p>看完后医生针对你们的疑问当面补充说明，完成本次术前告知。AR 讲清楚的是"共性的 80%"，医生省下的时间用来回答"你们家个性化的 20%"。</p>
+            <span class="fs-see">👀 把没看懂的地方记下来，这一步尽管问</span>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 三大模块 ===== -->
+<section class="chap" id="mods">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-grape">📦 里面有什么</span>
+      <h2>三个宣教模块，点开看详情</h2>
+    </div>
+    <div class="mod-grid">
+      <div class="mod reveal" data-mod="0">
+        <span class="m-emoji">🫀</span><b>身体探秘</b>
+        <p>手术部位的三维卡通模型，可放大、旋转、点选标注。</p>
+        <span class="m-open">点击查看详情 →</span>
+      </div>
+      <div class="mod reveal" data-mod="1">
+        <span class="m-emoji">🛤️</span><b>手术流程</b>
+        <p>从入院到苏醒的分步动画，术前要求逐条可视化。</p>
+        <span class="m-open">点击查看详情 →</span>
+      </div>
+      <div class="mod reveal" data-mod="2">
+        <span class="m-emoji">🩹</span><b>术后护理</b>
+        <p>伤口观察、饮食、活动、复诊，可扫码回家反复看。</p>
+        <span class="m-open">点击查看详情 →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 锦囊 ===== -->
+<section class="chap chap-alt" id="tips">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-sun">💡 家长使用锦囊</span>
+      <h2>这样用效果翻倍，这样用适得其反</h2>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-col good reveal">
+        <h3>✅ 建议这样做</h3>
+        <ul>
+          <li><i>🤝</i><span><b>陪孩子一起看</b>，指着画面聊："你看，医生会先给它洗一洗。"</span></li>
+          <li><i>🗣️</i><span>看完后<b>用自己的话讲给孩子听</b>——研究里"讲完让患者复述"是理解效果最好的环节。</span></li>
+          <li><i>🔁</i><span>利用<b>可回看</b>，术前反复核对禁食时间和报到要求。</span></li>
+          <li><i>❓</i><span>把没看懂的<b>记下来问医生</b>，第 6 步就是留给提问的。</span></li>
+        </ul>
+      </div>
+      <div class="tip-col bad reveal">
+        <h3>🚫 尽量避免</h3>
+        <ul>
+          <li><i>⚠️</i><span><b>恐吓式强调</b>："不听话就要打针开刀"——宣教不是威胁。</span></li>
+          <li><i>🌙</i><span>孩子情绪崩溃时<b>强行播放</b>，可以随时暂停改天看。</span></li>
+          <li><i>📱</i><span>当<b>哄娃动画片</b>让孩子独自看，家长全程不参与。</span></li>
+          <li><i>🧊</i><span>用 AR 内容<b>替代医嘱</b>——禁食、用药以医护当面告知为准。</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 安全 ===== -->
+<section class="chap" id="safe">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-coral">🛡️ 安全与边界</span>
+      <h2>我们对"负责"这件事的承诺</h2>
+    </div>
+    <div class="safe">
+      <div class="safe-row reveal"><span class="s-emoji">🩺</span><div><b>辅助定位，不替代医疗</b><p>AR 宣教是医患沟通的辅助工具。诊断、治疗方案与术后医嘱均以医护当面告知为准；两者不一致时，永远听医生的。</p></div></div>
+      <div class="safe-row reveal"><span class="s-emoji">📋</span><div><b>内容经医护审核</b><p>宣教内容依据临床路径与指南编写，由医院医护团队审核后上线。</p></div></div>
+      <div class="safe-row reveal"><span class="s-emoji">🛡️</span><div><b>无创无辐射</b><p>AR 只是屏幕上的动画叠加，设备不接触身体、不发射射线，全程在医生评估后、家长陪同下使用。</p></div></div>
+      <div class="safe-row reveal"><span class="s-emoji">🎭</span><div><b>尊重孩子的情绪</b><p>孩子抗拒时可立即暂停，宣教不是任务。必要时医护改用面对面讲解。</p></div></div>
+      <div class="safe-row reveal"><span class="s-emoji">🔒</span><div><b>隐私保护</b><p>系统不收集孩子的个人身份信息，观看记录仅用于宣教管理。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 证书 ===== -->
+<section class="chap chap-alt" id="cert">
+  <div class="wrap">
+    <div class="chap-head reveal">
+      <span class="kicker k-sky">🎓 阅读完成</span>
+      <h2>读完五章，领一张"AR 小专家"证书</h2>
+      <p>每读完一章就点亮一个标记，五个全亮后输入名字生成证书。</p>
+    </div>
+    <div class="cert-zone reveal">
+      <div class="read-chips" id="readChips">
+        <span class="chip" data-c="0">1️⃣ 是什么</span>
+        <span class="chip" data-c="1">2️⃣ 为什么</span>
+        <span class="chip" data-c="2">3️⃣ 六步流程</span>
+        <span class="chip" data-c="3">4️⃣ 锦囊</span>
+        <span class="chip" data-c="4">5️⃣ 安全边界</span>
+      </div>
+      <div class="cert-form">
+        <input type="text" id="certName" maxlength="12" placeholder="写上你的名字">
+        <button id="certBtn">生成我的证书</button>
+      </div>
+      <p id="certMsg" style="font-size:13.5px;font-weight:700;color:#c25b41;min-height:22px;margin-top:10px"></p>
+      <div class="cert" id="cert">
+        <h3>🎓 AR 宣教小专家证书</h3>
+        <span class="c-name" id="certShowName">小勇士</span>
+        <p>已完成《小熊术前小课堂 · AR 科普手册》全部五章阅读，<br>掌握了 AR 宣教的使用方法、家长锦囊与安全须知。</p>
+        <p style="margin-top:12px">🧸 小熊术前小课堂 · 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>玩一遍模拟器，走一遍六步，你就全懂了。</h2>
+    <p>接下来，去小朋友专区玩玩游戏，或去家长专区拿走禁食计算器吧。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>🧸 小熊术前小课堂 · AR 科普手册</b>
+    <p class="foot-note">本手册为术前宣教辅助材料，不能替代医护团队的当面告知。具体安排请一律以您的医护团队指示为准。</p>
+  </div>
+</footer>
+
+<!-- 模块详情弹窗 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <button class="m-close" id="modalClose">✕</button>
+    <span class="m-emoji" id="mdEmoji"></span>
+    <h3 id="mdTitle"></h3>
+    <p id="mdIntro"></p>
+    <ul id="mdList"></ul>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* 滚动揭示 */
+var reveals=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:.12});
+  reveals.forEach(function(el){ro.observe(el);});
+}else{reveals.forEach(function(el){el.classList.add('in');});}
+
+/* ===== AR 实时预览模拟器 ===== */
+var sim=document.getElementById('sim');
+var simStatus=document.getElementById('simStatus');
+var viewNormalBtn=document.getElementById('viewNormal');
+var viewARBtn=document.getElementById('viewAR');
+var rescanBtn=document.getElementById('rescanBtn');
+var simOrgans=document.getElementById('simOrgans');
+var simInfoTitle=document.getElementById('simInfoTitle');
+var simInfoText=document.getElementById('simInfoText');
+var ORGAN_NAMES={throat:'小喉咙',heart:'心脏',stomach:'胃'};
+var SIM_INFO={
+  throat:[
+    {t:'会厌 · 呼吸和吃饭的岔路口',d:'吞咽时会厌会像小盖子一样盖住气管口，让食物走"食道高速"、空气走"呼吸通道"，各走各路不迷路。'},
+    {t:'扁桃体 · "小捣蛋鬼"的老家',d:'两个守在喉咙口的小卫士。总是发炎变成"小捣蛋鬼"时，医生的小手术就是把它们请出去。'},
+    {t:'声带 · 两片小琴弦',d:'薄薄的两片小琴弦，呼气时一振动，你就有了声音——唱歌、说话全靠它们。'}
+  ],
+  heart:[
+    {t:'心室 · 小水泵车间',d:'两个"泵水车间"一收缩，就把血液送到全身，"咚咚"声就是它们工作的节拍。'},
+    {t:'瓣膜 · 单向小阀门',d:'只朝一个方向开的小阀门，保证血液不倒流——有些心脏手术修的就是这些小门。'},
+    {t:'冠状动脉 · 心脏的营养管',d:'给心脏自己供血的专用小水管，心脏不停工作的能量全靠它送饭。'}
+  ],
+  stomach:[
+    {t:'胃酸 · 消化工厂',d:'强力"消化液车间"，把食物泡软分解——所以手术前要禁食，让工厂彻底停工，麻醉才安全。'},
+    {t:'幽门 · 食物出口安检门',d:'食物糊糊的"出口安检门"，检查合格才放行去小肠继续吸收营养。'},
+    {t:'胃壁 · 弹性搅拌袋',d:'像有弹力的搅拌袋，一收一放把食物搓成软软的糊糊。'}
+  ]
+};
+var curOrgan='throat',scanTimer=null;
+function setViewBtns(ar){
+  viewARBtn.classList.toggle('on',ar);
+  viewNormalBtn.classList.toggle('on',!ar);
+}
+function setARView(ar){
+  sim.classList.toggle('ar',ar);
+  setViewBtns(ar);
+  simStatus.textContent=ar?('✨ AR 视角 · 模型已加载：'+ORGAN_NAMES[curOrgan]):'📷 普通视角 · 这是病房原本的样子';
+}
+function doScan(){
+  clearTimeout(scanTimer);
+  sim.classList.remove('ar');
+  sim.classList.add('scanning');
+  setViewBtns(false);
+  simStatus.textContent='🔄 正在扫描识别卡…';
+  simInfoTitle.textContent='👆 模型加载中，马上就好…';
+  simInfoText.textContent='扫卡后，对应手术部位的三维卡通模型会浮现在屏幕里。';
+  scanTimer=setTimeout(function(){
+    sim.classList.remove('scanning');
+    setARView(true);
+    simInfoTitle.textContent='👆 点击模型上发光的标签';
+    simInfoText.textContent='每个标签对应一段讲解——真实系统里，孩子点哪里，哪里就会"活"起来。';
+  },3400);
+}
+function setOrgan(k){
+  curOrgan=k;
+  ['throat','heart','stomach'].forEach(function(o){
+    document.getElementById('holo-'+o).style.display=(o===k)?'':'none';
+  });
+  simOrgans.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-o')===k);});
+  if(sim.classList.contains('ar'))simStatus.textContent='✨ AR 视角 · 模型已加载：'+ORGAN_NAMES[k];
+  document.querySelectorAll('.hlabel').forEach(function(l){l.classList.remove('sel');});
+}
+viewARBtn.addEventListener('click',function(){clearTimeout(scanTimer);sim.classList.remove('scanning');setARView(true);});
+viewNormalBtn.addEventListener('click',function(){clearTimeout(scanTimer);sim.classList.remove('scanning');setARView(false);});
+rescanBtn.addEventListener('click',doScan);
+simOrgans.addEventListener('click',function(e){
+  var b=e.target.closest('button');
+  if(b)setOrgan(b.getAttribute('data-o'));
+});
+document.querySelectorAll('.hlabel').forEach(function(l){
+  function show(){
+    document.querySelectorAll('.hlabel').forEach(function(x){x.classList.remove('sel');});
+    l.classList.add('sel');
+    var info=SIM_INFO[curOrgan][parseInt(l.getAttribute('data-i'),10)];
+    if(info){simInfoTitle.textContent='🔎 '+info.t;simInfoText.textContent=info.d;}
+  }
+  l.addEventListener('click',function(e){e.stopPropagation();show();});
+  l.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+  l.setAttribute('tabindex','0');
+  l.setAttribute('role','button');
+});
+/* 进场后自动演示一次：扫卡 → AR 视角 */
+var demoPlayed=false;
+if('IntersectionObserver' in window){
+  var so=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting&&!demoPlayed){demoPlayed=true;setTimeout(doScan,600);so.disconnect();}
+    });
+  },{threshold:.4});
+  so.observe(sim);
+}else{setTimeout(doScan,800);}
+
+/* ===== 三大模块弹窗 ===== */
+var mods=[
+  {emoji:'🫀',title:'模块一 · 身体探秘',
+   intro:'把孩子的手术部位变成可交互的三维卡通模型，用孩子听得懂的语言讲解剖。',
+   list:['器官模型可放大、旋转、分层查看，像动画片一样"活"起来。','围绕孩子自己的手术部位讲解，内容个体化——这是文献里提升理解程度最稳定的因素。','用比喻代替术语：扁桃体是"爱捣蛋的小捣蛋鬼"，心脏是"小马达"。','孩子亲手点选探索，从"被动听"变成"主动看"。']},
+  {emoji:'🛤️',title:'模块二 · 手术流程',
+   intro:'把手术日一天要做的事拆成一步步的轻量动画，逐站讲解。',
+   list:['入院核对 → 更衣 → 麻醉 → 手术 → 苏醒，每一站 30–60 秒。','禁食规则做成可视化时刻表，直击 13.5% "确认过却没做到"的痛点。','提前熟悉手术室环境与人员着装，减少陌生感。','孩子与家长同屏看，信息一致，避免传话误差。']},
+  {emoji:'🩹',title:'模块三 · 术后护理',
+   intro:'出院前讲得清、回家后想得起的术后护理板块。',
+   list:['伤口观察、饮食恢复、活动建议、复诊安排四大板块。','支持扫码回看，家属在家可反复复习。','明确标注"以医护当面交代为准"的边界，不越位。','护理要点与出院小结一致，双通道记忆更牢。']}
+];
+var modalMask=document.getElementById('modalMask');
+var mdEmoji=document.getElementById('mdEmoji');
+var mdTitle=document.getElementById('mdTitle');
+var mdIntro=document.getElementById('mdIntro');
+var mdList=document.getElementById('mdList');
+document.querySelectorAll('.mod').forEach(function(el){
+  el.addEventListener('click',function(){
+    var m=mods[parseInt(el.getAttribute('data-mod'),10)];
+    mdEmoji.textContent=m.emoji;mdTitle.textContent=m.title;mdIntro.textContent=m.intro;
+    mdList.innerHTML='';
+    m.list.forEach(function(t){var li=document.createElement('li');li.textContent=t;mdList.appendChild(li);});
+    modalMask.classList.add('show');
+  });
+});
+document.getElementById('modalClose').addEventListener('click',function(){modalMask.classList.remove('show');});
+modalMask.addEventListener('click',function(e){if(e.target===modalMask)modalMask.classList.remove('show');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')modalMask.classList.remove('show');});
+
+/* ===== 阅读进度 + 证书 ===== */
+var chips=document.querySelectorAll('#readChips .chip');
+var certMsg=document.getElementById('certMsg');
+document.getElementById('certBtn').addEventListener('click',function(){
+  var n=0;chips.forEach(function(c){if(c.classList.contains('on'))n++;});
+  var name=document.getElementById('certName').value.trim();
+  if(n<chips.length){certMsg.textContent='还有 '+(chips.length-n)+' 个章节没点亮哦，回去读完再点亮标记～';return;}
+  if(!name){certMsg.textContent='先写上名字吧（2-12 个字）';return;}
+  certMsg.textContent='';
+  document.getElementById('certShowName').textContent=name;
+  var cert=document.getElementById('cert');
+  cert.style.display='block';
+  cert.animate([{transform:'scale(.9) rotate(-2deg)',opacity:0},{transform:'scale(1) rotate(0)',opacity:1}],{duration:450,easing:'ease'});
+  cert.scrollIntoView({behavior:'smooth',block:'center'});
+});
+chips.forEach(function(c){
+  c.addEventListener('click',function(){c.classList.toggle('on');});
+});
+})();
+</script>
+</body>
+</html>
