@@ -96,9 +96,6 @@ section.chap{padding:66px 0}
 .organ-card.shake{animation:cardin .35s ease}
 @keyframes cardin{0%{transform:scale(.96);opacity:.6}100%{transform:scale(1);opacity:1}}
 .organ-card .oc-emoji{font-size:46px;line-height:1}
-.organ-card .oc-img{position:absolute;top:20px;right:20px;width:96px;height:96px;object-fit:cover;border-radius:22px;border:3px solid #fff;box-shadow:0 8px 18px rgba(93,140,160,.28);transform:rotate(4deg)}
-.organ-card.has-img h3{padding-right:104px}
-@media(max-width:520px){.organ-card .oc-img{width:74px;height:74px;top:16px;right:16px}.organ-card.has-img h3{padding-right:84px}}
 .organ-card h3{font-size:22px;font-weight:900;color:#33526b;margin-top:12px}
 .organ-card p{font-size:15px;color:var(--ink-soft);margin-top:10px}
 .organ-card .oc-tip{margin-top:16px;font-size:13.5px;font-weight:700;color:#2e7a63;background:rgba(127,216,190,.25);border-radius:14px;padding:10px 14px}
@@ -283,7 +280,6 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:640px;ma
       </div>
       <div class="reveal">
         <div class="organ-card" id="organCard">
-          <img class="oc-img" id="ocImg" alt="" style="display:none">
           <span class="oc-emoji" id="ocEmoji">👆</span>
           <h3 id="ocTitle">点一点左边的小圆点吧！</h3>
           <p id="ocText">六个发光的小圆点，藏着六个器官朋友。点开一个，小熊医生详细讲给你听！</p>
@@ -601,11 +597,11 @@ if('IntersectionObserver' in window){
 /* ===== 游戏一：身体小探险 ===== */
 var organOrder=['brain','throat','lungs','heart','stomach','tummy'];
 var organs={
-  brain:{emoji:'🧠',img:'assets/organ_brain.webp',title:'大脑：身体的"总司令部"',text:'它住在你的脑袋里，负责想事情、记东西、指挥全身动作。你眨眼睛、迈腿、做梦中笑出声，都是它在发号施令！',facts:['📍 在哪里：脑袋里，被厚厚的骨头壳保护着','⚙️ 干什么：思考和指挥全身，连睡觉时也在工作','🩺 什么时候医生会来：头部受伤或头痛很难受的时候','😴 手术小知识：做手术时它会安心休息，醒来后照常工作'],tip:'悄悄话：麻醉就是让它舒舒服服睡一觉，不会痛也不会记得，醒来什么都没少。'},
-  throat:{emoji:'🎤',img:'assets/organ_throat.webp',title:'小喉咙：声音和食物的"必经大门"',text:'说话、唱歌、咽东西，都要经过喉咙这道小门。有的小朋友喉咙里住着爱捣蛋的"小捣蛋鬼"（发炎的扁桃体），老是把门堵住，医生会帮把它请出去。',facts:['📍 在哪里：脖子中间，张嘴说"啊——"能看到的深处','⚙️ 干什么：让你发声、吞咽，还是呼吸的通道','🩺 什么时候医生会来：扁桃体老是发炎、堵住喉咙的时候','🍎 手术小知识：请走"小捣蛋鬼"后，先吃凉凉软软的食物'],tip:'悄悄话：用"请走小捣蛋鬼"给爸爸妈妈讲讲你的手术，他们一定会夸你讲得棒！'},
-  lungs:{emoji:'🫁',img:'assets/organ_lungs.webp',title:'肺：装满空气的两只"气球"',text:'你每吸一口气，两只粉粉的气球就鼓起来，把新鲜空气交给血液；呼气时它们瘪下去，把废气送走。跑步上楼喘气，就是它们在拼命干活！',facts:['📍 在哪里：胸口两侧，一边一只，肋骨围成的"笼子"里','⚙️ 干什么：把空气里的氧气交给血液，换走废气','🩺 什么时候医生会来：呼吸出问题或这里需要手术的时候','😌 手术小知识：麻醉前深呼吸几次，能帮自己放松'],tip:'悄悄话：深呼吸是个魔法——紧张的时候慢慢吸气、慢慢呼气，数到 4，身体就会安静下来。'},
-  heart:{emoji:'❤️',img:'assets/organ_heart.webp',title:'心脏：一天到晚工作的小马达',text:'它藏在你的胸口偏左边，像一个小水泵："咚咚、咚咚"地跳，一刻不停，把血液送到全身上下。你跑步的时候它跳得特别快，是在给你加油呢！',facts:['📍 在哪里：胸口中间偏左边，手掌按上去能感觉到跳','⚙️ 干什么：像水泵一样把血液送到全身，一辈子不停工','🩺 什么时候医生会来：有的小朋友的心脏需要医生帮忙修一修','💓 手术小知识：手术时它依然跳着，有机器一直盯着保护它'],tip:'悄悄话：把手放在胸口静静感受 10 秒——这就是它在你努力工作的声音。'},
-  stomach:{emoji:'🍚',img:'assets/organ_stomach.webp',title:'胃：食物的"搅拌工厂"',text:'你吃下的饭饭会先掉进这个肉肉的小袋子里，它像搅拌机一样把食物搓成软软的糊糊，再送到下一个车间。所以吃太快肚子会不舒服——工厂也需要时间呀。',facts:['📍 在哪里：左边肋骨下面，肚子偏左上的位置','⚙️ 干什么：搅拌、消化食物，变成身体能吸收的营养','🩺 什么时候医生会来：误食了危险的东西需要取出来的时候','🚫 手术小知识：手术前它必须完全清空——这就是要禁食的原因'],tip:'悄悄话：还记得"晚餐大作战"吗？手术前一天吃清淡的，就是让这座工厂早点下班休息。'},
+  brain:{emoji:'🧠',title:'大脑：身体的"总司令部"',text:'它住在你的脑袋里，负责想事情、记东西、指挥全身动作。你眨眼睛、迈腿、做梦中笑出声，都是它在发号施令！',facts:['📍 在哪里：脑袋里，被厚厚的骨头壳保护着','⚙️ 干什么：思考和指挥全身，连睡觉时也在工作','🩺 什么时候医生会来：头部受伤或头痛很难受的时候','😴 手术小知识：做手术时它会安心休息，醒来后照常工作'],tip:'悄悄话：麻醉就是让它舒舒服服睡一觉，不会痛也不会记得，醒来什么都没少。'},
+  throat:{emoji:'🎤',title:'小喉咙：声音和食物的"必经大门"',text:'说话、唱歌、咽东西，都要经过喉咙这道小门。有的小朋友喉咙里住着爱捣蛋的"小捣蛋鬼"（发炎的扁桃体），老是把门堵住，医生会帮把它请出去。',facts:['📍 在哪里：脖子中间，张嘴说"啊——"能看到的深处','⚙️ 干什么：让你发声、吞咽，还是呼吸的通道','🩺 什么时候医生会来：扁桃体老是发炎、堵住喉咙的时候','🍎 手术小知识：请走"小捣蛋鬼"后，先吃凉凉软软的食物'],tip:'悄悄话：用"请走小捣蛋鬼"给爸爸妈妈讲讲你的手术，他们一定会夸你讲得棒！'},
+  lungs:{emoji:'🫁',title:'肺：装满空气的两只"气球"',text:'你每吸一口气，两只粉粉的气球就鼓起来，把新鲜空气交给血液；呼气时它们瘪下去，把废气送走。跑步上楼喘气，就是它们在拼命干活！',facts:['📍 在哪里：胸口两侧，一边一只，肋骨围成的"笼子"里','⚙️ 干什么：把空气里的氧气交给血液，换走废气','🩺 什么时候医生会来：呼吸出问题或这里需要手术的时候','😌 手术小知识：麻醉前深呼吸几次，能帮自己放松'],tip:'悄悄话：深呼吸是个魔法——紧张的时候慢慢吸气、慢慢呼气，数到 4，身体就会安静下来。'},
+  heart:{emoji:'❤️',title:'心脏：一天到晚工作的小马达',text:'它藏在你的胸口偏左边，像一个小水泵："咚咚、咚咚"地跳，一刻不停，把血液送到全身上下。你跑步的时候它跳得特别快，是在给你加油呢！',facts:['📍 在哪里：胸口中间偏左边，手掌按上去能感觉到跳','⚙️ 干什么：像水泵一样把血液送到全身，一辈子不停工','🩺 什么时候医生会来：有的小朋友的心脏需要医生帮忙修一修','💓 手术小知识：手术时它依然跳着，有机器一直盯着保护它'],tip:'悄悄话：把手放在胸口静静感受 10 秒——这就是它在你努力工作的声音。'},
+  stomach:{emoji:'🍚',title:'胃：食物的"搅拌工厂"',text:'你吃下的饭饭会先掉进这个肉肉的小袋子里，它像搅拌机一样把食物搓成软软的糊糊，再送到下一个车间。所以吃太快肚子会不舒服——工厂也需要时间呀。',facts:['📍 在哪里：左边肋骨下面，肚子偏左上的位置','⚙️ 干什么：搅拌、消化食物，变成身体能吸收的营养','🩺 什么时候医生会来：误食了危险的东西需要取出来的时候','🚫 手术小知识：手术前它必须完全清空——这就是要禁食的原因'],tip:'悄悄话：还记得"晚餐大作战"吗？手术前一天吃清淡的，就是让这座工厂早点下班休息。'},
   tummy:{emoji:'🎈',title:'肚子：营养吸收站和"小捣蛋鬼"的家',text:'肚子里盘着一圈一圈的肠子，像一条长长的滑梯，食物糊糊从上面滑到下面，营养在路上被身体吸收。有的小朋友肚子里住着"小捣蛋鬼"（比如发炎的阑尾或小疝气），医生会做一个小手术把它解决掉。',facts:['📍 在哪里：肚脐周围一大圈，装着弯弯曲曲的肠子','⚙️ 干什么：把食物的营养吸收进身体，剩下的变成便便','🩺 什么时候医生会来：阑尾发炎、肚子上有个小鼓包（疝气）的时候','💤 手术小知识：睡一觉的工夫手术就做完了，醒来肚子上只有一个创可贴'],tip:'悄悄话：围绕自己手术部位的讲解，小朋友记得最牢——这正是 AR 让你"看见自己"的原因。'}
 };
 var ocEmoji=document.getElementById('ocEmoji');
@@ -613,7 +609,6 @@ var ocTitle=document.getElementById('ocTitle');
 var ocText=document.getElementById('ocText');
 var ocFacts=document.getElementById('ocFacts');
 var ocTip=document.getElementById('ocTip');
-var ocImg=document.getElementById('ocImg');
 var organCard=document.getElementById('organCard');
 function showOrgan(key){
   var o=organs[key];if(!o)return;
@@ -628,8 +623,6 @@ function showOrgan(key){
   });
   ocTip.textContent=o.tip;
   ocTip.style.display='block';
-  if(o.img){ocImg.src=o.img;ocImg.style.display='block';}else{ocImg.style.display='none';}
-  organCard.classList.toggle('has-img',!!o.img);
   organCard.classList.remove('shake');void organCard.offsetWidth;organCard.classList.add('shake');
   document.querySelectorAll('#organTabs button').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-organ')===key);});
   speak(o.title+'。'+o.text,'organ:'+key);
