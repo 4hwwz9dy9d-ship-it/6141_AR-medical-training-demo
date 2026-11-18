@@ -638,6 +638,8 @@ function giveBadge(k){
   if(b[k])return;
   b[k]=true;saveBadges(b);
   var def=null;BADGES.forEach(function(d){if(d.k===k)def=d;});
+  /* 记下最新勋章，让小熊伙伴下次聊天能对症夸奖、兑现「小惊喜」 */
+  try{localStorage.setItem('bear_last_badge',def?def.name:'新勋章');}catch(e){}
   renderBadges();
   var el=document.getElementById('bd-'+k);
   if(el)el.animate([{transform:'scale(1)'},{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:550,easing:'ease'});
