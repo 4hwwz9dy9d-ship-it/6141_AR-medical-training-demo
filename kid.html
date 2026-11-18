@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>小朋友专区 · 小熊术前小课堂</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='20' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='44' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='32' cy='36' r='22' fill='%23d99a68'/%3E%3Ccircle cx='24' cy='32' r='3' fill='%233a2a1a'/%3E%3Ccircle cx='40' cy='32' r='3' fill='%233a2a1a'/%3E%3Cellipse cx='32' cy='42' rx='8' ry='6' fill='%23f3d9b8'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/bear/favicon.png">
 <style>
 :root{
   --sky:#bfe6f5;--sky-deep:#5db4dd;--sun:#ffd166;--coral:#ff8a70;--mint:#7fd8be;
@@ -23,6 +23,7 @@ button{font-family:inherit}
 .topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:#4a6275}
 .brand svg{width:34px;height:34px}
+.brand-bear{width:36px;height:36px;border-radius:50%;flex:none;box-shadow:0 2px 8px rgba(80,150,140,.22)}
 .top-links{display:flex;gap:6px}
 .top-links a{font-size:13.5px;font-weight:700;padding:8px 14px;border-radius:999px;color:var(--ink-soft);transition:.2s}
 .top-links a:hover,.top-links a.here{background:rgba(255,209,102,.4);color:var(--ink)}
@@ -61,13 +62,38 @@ button{font-family:inherit}
 .confetti{position:fixed;top:-20px;z-index:99;font-size:20px;pointer-events:none;animation:confall 1.6s ease-in forwards}
 @keyframes confall{to{transform:translateY(105vh) rotate(540deg);opacity:.2}}
 
-/* ===== 勇气加油站 ===== */
-.calm-box{max-width:560px;margin:0 auto;background:linear-gradient(170deg,#e8f6fb,#f0fbf3);border-radius:32px;border:3px dashed rgba(127,216,190,.6);padding:34px 28px;text-align:center;box-shadow:var(--shadow)}
-.breath-circle{width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#bfe9f7,#7fd8be);margin:26px auto 8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#1f5c4a;box-shadow:0 0 0 0 rgba(127,216,190,.5);transition:transform 4s ease-in-out;transform:scale(.72)}
-.breath-circle.big{transform:scale(1.18)}
-.breath-circle.hold{transform:scale(1.18);transition:none}
-.breath-txt{font-size:15px;font-weight:800;color:#2e7a63;min-height:26px;margin-top:14px}
-.breath-tip{font-size:12.5px;color:var(--ink-soft);margin-top:14px;background:rgba(255,255,255,.7);border-radius:14px;padding:10px 14px;line-height:1.7}
+/* ===== 勇气加油站：吹泡泡深呼吸（重做）===== */
+.calm-box{max-width:620px;margin:0 auto;background:linear-gradient(165deg,#eaf8ff 0%,#eefaf4 55%,#fff6e8 100%);border-radius:34px;border:3px solid #fff;box-shadow:0 18px 44px rgba(93,150,170,.20),inset 0 0 0 3px rgba(127,216,190,.18);padding:30px 26px 30px;text-align:center;overflow:hidden;position:relative}
+.bub-scene{position:relative;height:270px;display:flex;align-items:center;justify-content:center;margin:6px 0 4px}
+/* 呼吸光圈：随吸气/呼气一起放大缩小 */
+.bub-halo{position:absolute;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,rgba(127,216,190,.28),rgba(127,216,190,0) 70%);transform:scale(.8);transition:transform 4s ease-in-out,opacity 4s ease-in-out;opacity:.55}
+.bub-halo.big{transform:scale(1.35);opacity:.9}
+.bub-halo.small{transform:scale(.72);opacity:.35}
+/* 主泡泡：肥皂泡质感 + 彩虹边 */
+.breath-circle{position:relative;width:196px;height:196px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.95) 0%,rgba(196,238,255,.75) 30%,rgba(160,224,214,.55) 62%,rgba(180,170,240,.5) 100%);border:3px solid rgba(255,255,255,.9);box-shadow:inset -10px -14px 26px rgba(108,160,190,.22),inset 8px 10px 22px rgba(255,255,255,.85),0 14px 34px rgba(86,160,170,.28),0 0 0 6px rgba(255,255,255,.35);transform:scale(.86);transition:transform 4s ease-in-out;z-index:2;overflow:hidden}
+.breath-circle.big{transform:scale(1.2)}
+.breath-circle.hold{transition:none}
+/* 高光 */
+.breath-circle .bub-shine{position:absolute;top:14px;left:22px;width:56px;height:34px;background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(255,255,255,0));border-radius:50%;transform:rotate(-28deg);pointer-events:none;z-index:4}
+/* 泡泡里的小熊：放大、居底 */
+.bub-bear{width:170px;height:170px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 10px rgba(70,110,120,.18));position:relative;z-index:3;margin-top:30px;animation:bob 3.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+/* 小泡泡群 */
+.mini-bub{position:absolute;border-radius:50%;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.95),rgba(190,232,248,.5) 45%,rgba(167,139,250,.28) 100%);border:2px solid rgba(255,255,255,.75);box-shadow:inset -3px -4px 8px rgba(110,160,190,.18),0 6px 14px rgba(90,150,170,.16);z-index:1;animation:floatbub 6s ease-in-out infinite}
+.mini-bub.mb1{width:46px;height:46px;left:10%;top:18%;animation-delay:0s}
+.mini-bub.mb2{width:32px;height:32px;right:12%;top:26%;animation-delay:.8s}
+.mini-bub.mb3{width:58px;height:58px;right:16%;bottom:12%;animation-delay:1.6s}
+.mini-bub.mb4{width:26px;height:26px;left:20%;bottom:16%;animation-delay:2.2s}
+.mini-bub.mb5{width:20px;height:20px;left:38%;top:4%;animation-delay:1.1s}
+@keyframes floatbub{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+/* 呼吸节拍：圆点 + 读秒 */
+.bub-beat{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 2px}
+.bub-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#4a7f74;background:rgba(255,255,255,.85);border:2.5px solid rgba(127,216,190,.55);transition:.25s}
+.bub-dot.on{background:var(--mint);border-color:#4fbf9c;color:#fff;transform:scale(1.14);box-shadow:0 6px 16px rgba(79,191,156,.4)}
+.bub-arrow{color:#9dc7bd;font-weight:900}
+.bub-count{font-size:13px;font-weight:900;color:#5a9c8a;min-height:20px;margin-top:6px;letter-spacing:.06em}
+.breath-txt{font-size:16px;font-weight:900;color:#2e7a63;min-height:28px;margin-top:10px;line-height:1.5}
+.breath-tip{font-size:12.5px;color:var(--ink-soft);margin-top:16px;background:rgba(255,255,255,.78);border-radius:15px;padding:11px 15px;line-height:1.7;text-align:left}
 
 section.chap{padding:66px 0}
 .chap-alt{background:#fdf3e4}
@@ -187,13 +213,14 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:640px;ma
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.j-stop:hover{transform:none}}
 </style>
+<link rel="stylesheet" href="css/bear-assistant.css">
 </head>
 <body>
 
 <nav class="topnav">
   <div class="wrap">
     <a class="brand" href="index.html">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="14" r="9" fill="#c98a5b"/><circle cx="46" cy="14" r="9" fill="#c98a5b"/><circle cx="32" cy="36" r="22" fill="#d99a68"/><circle cx="24" cy="32" r="3" fill="#3a2a1a"/><circle cx="40" cy="32" r="3" fill="#3a2a1a"/><ellipse cx="32" cy="43" rx="8" ry="6" fill="#f3d9b8"/><path d="M28 43q4 4 8 0" stroke="#3a2a1a" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <img class="brand-bear" src="assets/bear/bear-logo.png" alt="" aria-hidden="true">
       <span>小熊术前小课堂</span>
     </a>
     <div class="top-links">
@@ -389,9 +416,26 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:640px;ma
       <p>这是医生护士都会用的"安静魔法"：吸气 4 秒 → 憋住 4 秒 → 呼气 4 秒，身体就会慢慢放松下来。</p>
     </div>
     <div class="calm-box reveal">
-      <div class="breath-circle" id="breathBall">🌬️</div>
-      <div class="breath-txt" id="breathTxt">点下面的按钮，跟泡泡一起练习</div>
-      <div class="j-nav" style="margin-top:16px">
+      <div class="bub-scene">
+        <span class="mini-bub mb1"></span>
+        <span class="mini-bub mb2"></span>
+        <span class="mini-bub mb3"></span>
+        <span class="mini-bub mb4"></span>
+        <span class="mini-bub mb5"></span>
+        <div class="bub-halo" id="bubHalo"></div>
+        <div class="breath-circle" id="breathBall">
+          <span class="bub-shine"></span>
+          <img class="bub-bear" src="assets/bear/bear-idle.webp" alt="小熊陪你深呼吸">
+        </div>
+      </div>
+      <div class="bub-beat" id="bubBeat">
+        <span class="bub-dot" data-p="0">1</span><span class="bub-arrow">→</span>
+        <span class="bub-dot" data-p="1">2</span><span class="bub-arrow">→</span>
+        <span class="bub-dot" data-p="2">3</span>
+      </div>
+      <div class="bub-count" id="bubCount">跟着节奏，吸气 · 憋住 · 呼气</div>
+      <div class="breath-txt" id="breathTxt">点下面的按钮，和小熊一起吹泡泡</div>
+      <div class="j-nav" style="margin-top:14px">
         <button class="j-next" id="breathBtn" style="background:var(--mint)">▶ 开始练习</button>
       </div>
       <p class="breath-tip">💚 <b>给爸爸妈妈的小知识：</b>这是儿科常用的"箱式呼吸法"，能激活身体的放松反应、降低心率。手术前一晚和当天早上，陪孩子练几次，紧张感会明显下降——您稳稳的陪伴，本身就是孩子最好的安心药。</p>
@@ -436,7 +480,9 @@ var VOICE_MAP={
   'breath':'breath.mp3'
 };
 var SILENT_WAV='data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
-var voiceOn=true,bearVoice=null,bearAudio=null,voiceDone=true,audioUnlocked=false;
+var voiceOn=true,bearVoice=null,bearAudio=null,audioUnlocked=false;
+/* 语音队列：任何时刻只念一条，彻底避免"讲解 + 徽章太棒了"叠在一起 */
+var voiceQueue=[],voiceBusy=false;
 
 function pickBearVoice(){
   if(!window.speechSynthesis)return;
@@ -478,40 +524,61 @@ function unlockAudio(){
 document.addEventListener('touchstart',unlockAudio,{once:true,capture:true,passive:true});
 document.addEventListener('click',unlockAudio,{once:true,capture:true});
 
-function ttsFallback(text){
-  if(!voiceOn||!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
+function ttsFallback(text,done){
+  done=done||function(){};
+  if(!voiceOn||!window.speechSynthesis||!window.SpeechSynthesisUtterance){done();return;}
   try{
     window.speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(text);
     u.lang='zh-CN';
     if(bearVoice)u.voice=bearVoice;
     u.rate=.88;u.pitch=1.12;u.volume=1;
+    u.onend=done;u.onerror=done;
     window.speechSynthesis.speak(u);
-  }catch(e){}
+  }catch(e){done();}
 }
-function speak(text,key){
-  if(!voiceOn)return;
-  var f=key&&VOICE_MAP[key];
-  if(!f){voiceDone=true;ttsFallback(text);return;}
+/* 真正播放一条：优先预置温柔配音，失败降级 TTS；播完回调以驱动队列 */
+function playVoice(item,done){
+  var doneCalled=false;
+  function finish(){if(doneCalled)return;doneCalled=true;done();}
+  var f=item.key&&VOICE_MAP[item.key];
+  if(!f){ttsFallback(item.text,finish);return;}
   try{
     var a=ensureAudio();
     a.onended=null;a.onerror=null;
     a.pause();
-    voiceDone=false;
-    a.onended=function(){voiceDone=true;};
-    a.onerror=function(){voiceDone=true;ttsFallback(text);};
+    a.onended=finish;
+    a.onerror=function(){ttsFallback(item.text,finish);};
     a.src=VOICE_BASE+f;
     a.currentTime=0;
     var p=a.play();
-    if(p&&p.catch)p.catch(function(){voiceDone=true;ttsFallback(text);});
-  }catch(e){voiceDone=true;ttsFallback(text);}
+    if(p&&p.catch)p.catch(function(){ttsFallback(item.text,finish);});
+  }catch(e){ttsFallback(item.text,finish);}
+}
+/* 队列泵：一条播完再播下一条，杜绝重叠 */
+function pumpVoice(){
+  if(voiceBusy||!voiceOn||!voiceQueue.length)return;
+  voiceBusy=true;
+  var item=voiceQueue.shift();
+  playVoice(item,function(){
+    voiceBusy=false;
+    if(voiceQueue.length)setTimeout(pumpVoice,160);
+  });
+}
+/* 入队：同一条消息只保留一次，避免连点重复朗读 */
+function speak(text,key){
+  if(!voiceOn)return;
+  var k=key||'',t=String(text||'');
+  for(var i=voiceQueue.length-1;i>=0;i--){if(voiceQueue[i].key===k&&voiceQueue[i].text===t)return;}
+  voiceQueue.push({text:t,key:k});
+  pumpVoice();
 }
 function isSpeaking(){
-  if(!voiceDone)return true;
+  if(voiceBusy||voiceQueue.length)return true;
   try{return !!(window.speechSynthesis&&window.speechSynthesis.speaking);}catch(e){return false;}
 }
 function stopSpeak(){
-  voiceDone=true;
+  voiceQueue.length=0;voiceBusy=false;
   if(bearAudio){try{bearAudio.onended=null;bearAudio.onerror=null;bearAudio.pause();}catch(e){}}
   if(window.speechSynthesis)try{window.speechSynthesis.cancel();}catch(e){}
 }
@@ -893,45 +960,71 @@ document.getElementById('quizRestart').addEventListener('click',function(){
 });
 qRender();
 
-/* ===== 勇气加油站：箱式呼吸 ===== */
+/* ===== 勇气加油站：吹泡泡 · 箱式呼吸 ===== */
 (function(){
   var ball=document.getElementById('breathBall');
+  var halo=document.getElementById('bubHalo');
   var txt=document.getElementById('breathTxt');
+  var count=document.getElementById('bubCount');
   var btn=document.getElementById('breathBtn');
-  var running=false,phase=0,timer=null;
+  var dots=Array.prototype.slice.call(document.querySelectorAll('.bub-dot'));
+  var running=false,phase=0,tickTimer=null,nullTimer=null;
+  var SEC=4;
   var phases=[
-    {t:'🌬️ 慢慢吸气…… 1、2、3、4',s:'big',d:4000},
-    {t:'🤫 轻轻憋住…… 1、2、3、4',s:'hold',d:4000},
-    {t:'💨 慢慢呼气…… 1、2、3、4',s:'small',d:4000}
+    {t:'🌬️ 吸气——把泡泡吹得大大的',cls:'big',tag:'吸气 4 秒'},
+    {t:'🤫 憋住——泡泡停在空中',cls:'hold',tag:'憋住 4 秒'},
+    {t:'💨 呼气——泡泡慢慢变小',cls:'small',tag:'呼气 4 秒'}
   ];
   function setPhase(i){
-    var p=phases[i%3];
+    var p=phases[i];
+    dots.forEach(function(d,idx){d.classList.toggle('on',idx===i);});
+    ball.classList.remove('big','small');
+    halo.classList.remove('big','small');
+    if(p.cls==='big'){ball.classList.add('big');halo.classList.add('big');}
+    if(p.cls==='small'){ball.classList.add('small');halo.classList.add('small');}
+    if(p.cls==='hold'){ball.classList.add('big');halo.classList.add('big');}
     txt.textContent=p.t;
-    ball.classList.remove('big','hold');
-    if(p.s==='big')ball.classList.add('big');
-    if(p.s==='hold')ball.classList.add('hold');
+    count.textContent=p.tag+'　·　'+SEC;
+  }
+  function clearTimers(){if(tickTimer)clearInterval(tickTimer);if(nullTimer)clearTimeout(nullTimer);tickTimer=null;nullTimer=null;}
+  function runPhase(i){
+    if(!running)return;
+    phase=i;setPhase(i);
+    var left=SEC;
+    tickTimer=setInterval(function(){
+      left--;
+      if(!running){clearTimers();return;}
+      if(left>0){count.textContent=phases[i].tag+'　·　'+left;return;}
+      clearInterval(tickTimer);tickTimer=null;
+      var next=(i+1)%phases.length;
+      nullTimer=setTimeout(function(){runPhase(next);},260);
+    },1000);
+  }
+  function reset(){
+    running=false;clearTimers();
+    ball.classList.remove('big','small');halo.classList.remove('big','small');
+    dots.forEach(function(d){d.classList.remove('on');});
+    txt.textContent='点下面的按钮，和小熊一起吹泡泡';
+    count.textContent='跟着节奏，吸气 · 憋住 · 呼气';
+    btn.textContent='▶ 开始练习';
   }
   btn.addEventListener('click',function(){
-    if(running){
-      running=false;clearTimeout(timer);
-      ball.classList.remove('big','hold');
-      txt.textContent='点下面的按钮，跟泡泡一起练习';
-      btn.textContent='▶ 开始练习';
-      return;
-    }
-    running=true;phase=0;
+    if(running){stopSpeak();reset();return;}
+    clearTimers();running=true;
     btn.textContent='⏸ 停一下';
-    setPhase(0);
-    speak('跟着泡泡一起：慢慢吸气，憋住，再慢慢呼气。你做得很好。','breath');
-    timer=setTimeout(function loop(){
-      phase++;
-      if(!running)return;
-      setPhase(phase);
-      timer=setTimeout(loop,phases[phase%3].d);
-    },4000);
+    speak('跟着泡泡一起：慢慢吸气，把泡泡吹大；憋住；再慢慢呼出来。你做得很好。','breath');
+    runPhase(0);
   });
 })();
 })();
 </script>
+
+<!-- 小熊伙伴 · 独立模块（不改动原页面逻辑） -->
+<script src="js/bear-emotion.js"></script>
+<script src="js/bear-voice.js"></script>
+<script src="js/bear-ar-context.js"></script>
+<script src="js/bear-config.js"></script>
+<script src="js/bear-chat.js"></script>
+<script src="js/bear-assistant.js"></script>
 </body>
 </html>

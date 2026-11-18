@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>家长专区 · 小熊术前小课堂</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='20' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='44' cy='16' r='10' fill='%23c98a5b'/%3E%3Ccircle cx='32' cy='36' r='22' fill='%23d99a68'/%3E%3Ccircle cx='24' cy='32' r='3' fill='%233a2a1a'/%3E%3Ccircle cx='40' cy='32' r='3' fill='%233a2a1a'/%3E%3Cellipse cx='32' cy='42' rx='8' ry='6' fill='%23f3d9b8'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/bear/favicon.png">
 <style>
 :root{
   --sky:#bfe6f5;--sky-deep:#5db4dd;--sun:#ffd166;--coral:#ff8a70;--mint:#7fd8be;
@@ -23,10 +23,17 @@ button{font-family:inherit}
 .topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:#4a6275}
 .brand svg{width:34px;height:34px}
+.brand-bear{width:36px;height:36px;border-radius:50%;flex:none;box-shadow:0 2px 8px rgba(80,150,140,.22)}
 .top-links{display:flex;gap:6px}
 .top-links a{font-size:13.5px;font-weight:700;padding:8px 14px;border-radius:999px;color:var(--ink-soft);transition:.2s}
 .top-links a:hover,.top-links a.here{background:rgba(127,216,190,.35);color:var(--ink)}
-@media(max-width:680px){.top-links{display:none}}
+.nav-toggle{display:none;border:none;background:rgba(255,209,102,.35);border-radius:12px;font-size:19px;line-height:1;padding:9px 13px;cursor:pointer;color:#4a6275}
+@media(max-width:680px){
+  .nav-toggle{display:block}
+  .top-links{display:none;position:absolute;top:62px;left:0;right:0;flex-direction:column;gap:4px;padding:12px 22px 16px;background:rgba(255,251,242,.98);border-bottom:2px dashed rgba(255,209,102,.4);box-shadow:0 14px 26px rgba(93,140,160,.12)}
+  .top-links.open{display:flex}
+  .top-links a{padding:12px 14px}
+}
 
 .page-hero{background:linear-gradient(170deg,#cdeee2,#e2f5ec 60%,#fff8ee);padding:104px 0 44px;text-align:center}
 .page-hero h1{font-size:clamp(25px,4.2vw,40px);font-weight:900;color:#2e7a63}
@@ -188,13 +195,14 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:680px;ma
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.h-organ,.p-part,.p-hlabel .pl-dot{animation:none}}
 </style>
+<link rel="stylesheet" href="css/bear-assistant.css">
 </head>
 <body>
 
 <nav class="topnav">
   <div class="wrap">
     <a class="brand" href="index.html">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="14" r="9" fill="#c98a5b"/><circle cx="46" cy="14" r="9" fill="#c98a5b"/><circle cx="32" cy="36" r="22" fill="#d99a68"/><circle cx="24" cy="32" r="3" fill="#3a2a1a"/><circle cx="40" cy="32" r="3" fill="#3a2a1a"/><ellipse cx="32" cy="43" rx="8" ry="6" fill="#f3d9b8"/><path d="M28 43q4 4 8 0" stroke="#3a2a1a" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <img class="brand-bear" src="assets/bear/bear-logo.png" alt="" aria-hidden="true">
       <span>小熊术前小课堂</span>
     </a>
     <div class="top-links">
@@ -203,8 +211,21 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:680px;ma
       <a href="parent.html" class="here">👨‍👩‍👧 家长</a>
       <a href="ar.html">📱 AR手册</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">☰</button>
   </div>
 </nav>
+<script>
+(function(){
+  var navToggle=document.getElementById('navToggle');
+  var topLinks=document.querySelector('.top-links');
+  if(!navToggle||!topLinks)return;
+  navToggle.addEventListener('click',function(){
+    var open=topLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded',open?'true':'false');
+    navToggle.textContent=open?'✕':'☰';
+  });
+})();
+</script>
 
 <header class="page-hero">
   <div class="wrap">
@@ -614,5 +635,13 @@ document.querySelectorAll('.faq-item').forEach(function(item){
 });
 })();
 </script>
+
+<!-- 小熊伙伴 · 独立模块（不改动原页面逻辑） -->
+<script src="js/bear-emotion.js"></script>
+<script src="js/bear-voice.js"></script>
+<script src="js/bear-ar-context.js"></script>
+<script src="js/bear-config.js"></script>
+<script src="js/bear-chat.js"></script>
+<script src="js/bear-assistant.js"></script>
 </body>
 </html>
