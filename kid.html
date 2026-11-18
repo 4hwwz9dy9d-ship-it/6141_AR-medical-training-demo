@@ -746,31 +746,30 @@ autoBtn.addEventListener('click',function(){
   speak('好啦，小熊要带你认识身体里的六个朋友啦，出发！','intro');
   autoTimer=setInterval(function(){if(!isSpeaking()){clearInterval(autoTimer);autoTimer=null;if(autoOn)autoStep();}},300);
 });
-document.querySelectorAll('.organ-dot').forEach(function(dot){
-  function go(){
-    if(autoOn&&typeof stopAuto==='function')stopAuto();
-    document.querySelectorAll('.organ-dot').forEach(function(d){d.classList.remove('active');});
-    dot.classList.add('active');
-    showOrgan(dot.getAttribute('data-organ'));
+/* 点选圆点：首次先播「获得勋章」鼓励、再讲知识；之后再点则跳过勋章，直接讲知识。
+   语音队列保证先入队的勋章语音播完，才轮到知识讲解，不会重叠。 */
+var explored={};
+function goDot(dot){
+  var key=dot.getAttribute('data-organ');
+  if(autoOn&&typeof stopAuto==='function')stopAuto();
+  document.querySelectorAll('.organ-dot').forEach(function(d){d.classList.remove('active');});
+  dot.classList.add('active');
+  // 首次探索该部位 → 先发勋章（勋章语音先入队）
+  if(!explored[key]){
+    explored[key]=true;
+    var n=Object.keys(explored).length;
+    if(n===1)giveBadge('explore');
+    else if(n>=Object.keys(organs).length)giveBadge('exploreAll');
   }
-  dot.addEventListener('click',function(e){e.preventDefault();go();});
-  dot.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+  // 知识讲解随后入队（第二次点击只会走这一步，没有勋章语音）
+  showOrgan(key);
+}
+document.querySelectorAll('.organ-dot').forEach(function(dot){
+  dot.addEventListener('click',function(e){e.preventDefault();goDot(dot);});
+  dot.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();goDot(dot);}});
 });
 document.querySelectorAll('#organTabs button').forEach(function(b){
   b.addEventListener('click',function(){if(autoOn)stopAuto();showOrgan(b.getAttribute('data-organ'));});
-});
-/* 点选圆点：首次 → 探险家徽章；集齐 6 个 → 探秘全星章 */
-var explored={};
-document.querySelectorAll('.organ-dot').forEach(function(d){
-  d.addEventListener('click',function(){
-    var key=d.getAttribute('data-organ');
-    if(!explored[key]){
-      explored[key]=true;
-      var n=Object.keys(explored).length;
-      if(n===1)giveBadge('explore');
-      else if(n>=Object.keys(organs).length)giveBadge('exploreAll');
-    }
-  });
 });
 /* 语音开关 */
 var voiceBtn=document.getElementById('voiceBtn');
@@ -1021,6 +1020,7 @@ qRender();
 
 <!-- 小熊伙伴 · 独立模块（不改动原页面逻辑） -->
 <script src="js/bear-emotion.js"></script>
+<script src="js/bear-chat-voice-map.js"></script>
 <script src="js/bear-voice.js"></script>
 <script src="js/bear-ar-context.js"></script>
 <script src="js/bear-config.js"></script>

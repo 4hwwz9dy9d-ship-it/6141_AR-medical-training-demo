@@ -1,0 +1,28 @@
+/* 小熊助手预置温柔语音映射 · 由 语音素材/generate_bear_chat_voice.py 生成，勿手改 */
+window.BearChatVoiceMap = {
+    "害怕很正常呀。小熊陪你先做三次深呼吸：吸气——慢慢呼出来。也可以点下面的「呼吸练习」一起做。真正担心的事，一定要告诉爸爸妈妈和医生哦。": "assets/bear/chatvoice/chat_00.mp3",
+    "手术前要暂时让小肚子空下来，这样麻醉才安全。具体从几点开始不吃不喝，要听医生和护士的安排，小熊不能替他们决定哦。": "assets/bear/chatvoice/chat_01.mp3",
+    "医生会用办法让你舒服一些，有不舒服要马上告诉大人。小熊答应你，有什么不懂的都可以问我，也可以问医生。": "assets/bear/chatvoice/chat_02.mp3",
+    "可以问问护士阿姨能不能带上你最喜欢的玩具，很多医院都允许带一个小伙伴陪你呢。": "assets/bear/chatvoice/chat_03.mp3",
+    "你好呀！我是小熊，陪你认识身体、认识手术。你现在在看哪一页呀？": "assets/bear/chatvoice/chat_04.mp3",
+    "你正在看的这个部位很重要哦。点一点画面上的小圆点，我会告诉你它叫什么、在哪里、医生为什么会讲到它。": "assets/bear/chatvoice/chat_05.mp3",
+    "手术那天大概是这样：先核对名字、换好衣服，然后麻醉、手术、苏醒。每一步都有医生和护士陪着你。想看动画的话，去「AR 手册」页看那一段小视频吧。": "assets/bear/chatvoice/chat_06.mp3",
+    "爸爸妈妈会一直在你身边。要是你有问题不敢说，也可以让小熊帮你把问题写下来给医生看。": "assets/bear/chatvoice/chat_07.mp3",
+    "页面里有「禁食时间计算器」，按手术时间倒推即可。但请务必以所在医院下发的禁食通知为准——本页内容不能替代医嘱。": "assets/bear/chatvoice/chat_08.mp3",
+    "可以先用孩子能听懂的比喻讲流程，让孩子亲手点一点器官模型；回答不了的问题就一起记下来问医生。避免用\"不疼\"\"没事\"这类承诺。": "assets/bear/chatvoice/chat_09.mp3",
+    "AR 手册里有 30 秒演示动画和六步流程。实际时间因术式和医院安排差异很大，请以病区通知为准。": "assets/bear/chatvoice/chat_10.mp3",
+    "家长专区有术后护理和 7 项准备清单。具体用药、饮食恢复与复查安排，请严格遵从主刀和麻醉团队。": "assets/bear/chatvoice/chat_11.mp3",
+    "您好，我是小熊助手。目前未能连接 AI 服务，先由本地样例为您解答，请以医护告知为准。": "assets/bear/chatvoice/chat_12.mp3",
+    "这个问题小熊还想再学一学。不如我们一起去「AR 手册」看看？如果很担心，记得告诉爸爸妈妈和医生哦。": "assets/bear/chatvoice/chat_13.mp3",
+    "这个问题超出可回答范围。本页内容不能替代医护告知，请向主刀或麻醉团队确认。": "assets/bear/chatvoice/chat_14.mp3",
+    "太好啦！小熊也替你开心！": "assets/bear/chatvoice/chat_15.mp3",
+    "平静的时候最适合认识新东西，我们慢慢来。": "assets/bear/chatvoice/chat_16.mp3",
+    "紧张很正常。来，和我一起做三次深呼吸好不好？": "assets/bear/chatvoice/chat_17.mp3",
+    "小熊想抱抱你。难过可以说出来，大人会帮你。": "assets/bear/chatvoice/chat_18.mp3",
+    "生气也可以说出来。你愿意告诉小熊是为什么吗？": "assets/bear/chatvoice/chat_19.mp3",
+    "那就先休息一下吧，小熊一直在这儿。": "assets/bear/chatvoice/chat_20.mp3",
+    "你好呀！我是小熊，有什么问题可以问我。": "assets/bear/chatvoice/chat_21.mp3",
+    "您好，我是小熊助手。家长模式会给您更专业、简洁的说明，请问想了解什么？": "assets/bear/chatvoice/chat_22.mp3",
+    "还没有可以朗读的回复，先问我一个问题吧。": "assets/bear/chatvoice/chat_23.mp3",
+    "这个浏览器暂时不支持语音输入，可以直接打字告诉我哦。": "assets/bear/chatvoice/chat_24.mp3"
+};

@@ -32,12 +32,12 @@
     voices.forEach(function (v) {
       var n = (v.name || '').toLowerCase();
       var s = -1;
-      if (/xiaoxiao|晓晓/.test(n)) s = 100;
-      else if (/huihui|慧慧/.test(n)) s = 90;
-      else if (/xinyao|yaoyao|yunxi/.test(n)) s = 80;
-      else if (/female|女/.test(n)) s = 60;
-      else if (/natural|neural/.test(n)) s = 50;
-      else if (/zh[-_]?cn/.test((v.lang || '').toLowerCase())) s = 40;
+      if (/xiaoxiao|晓晓|xiaoyi|晓伊|tingting|ting-ting/.test(n)) s = 100;
+      else if (/huihui|慧慧|yaoyao|瑶瑶|nn|female/.test(n)) s = 92;
+      else if (/meijia|佳|sinji|google 普通话|samantha/.test(n)) s = 85;
+      else if (/xinyao|yunxi|natural|neural|premium|enhanced/.test(n)) s = 78;
+      else if (/female|女|women/.test(n)) s = 70;
+      else if (/zh[-_]?cn/.test((v.lang || '').toLowerCase())) s = 50;
       if (s > bestScore) { bestScore = s; best = v; }
     });
     pickedVoice = best;
@@ -72,8 +72,8 @@
       var v = pickVoice();
       if (v) u.voice = v;
       u.lang = 'zh-CN';
-      u.rate = 0.88;      // 放慢，孩子听得清
-      u.pitch = 1.15;     // 轻轻提一点，柔和
+      u.rate = 0.82;      // 再放慢，孩子听得清、更像讲故事
+      u.pitch = 1.12;     // 轻轻提一点，柔和
       u.volume = 1;
       u.onend = function () { if (!isCurrent(seq)) return; speaking = false; if (onend) onend(true); };
       u.onerror = function () { if (!isCurrent(seq)) return; speaking = false; if (onend) onend(false); };
@@ -85,7 +85,20 @@
     }
   }
 
-  /** 主朗读入口：优先后端温柔 MP3，失败回退浏览器。
+  /** 播放本地预置的温柔 MP3（与 kid.html 同一音色，手机/微信也一致） */
+  function playPreset(url, content, onend, seq) {
+    var a = new Audio(url);
+    audioEl = a;
+    a.onended = function () { if (!isCurrent(seq)) return; speaking = false; if (onend) onend(true); };
+    a.onerror = function () { if (!isCurrent(seq)) return; browserSpeak(content, onend, seq); };
+    var pr = a.play();
+    if (pr && pr.catch) pr.catch(function () { if (!isCurrent(seq)) return; browserSpeak(content, onend, seq); });
+    return true;
+  }
+
+  /** 主朗读入口：① 预置温柔 MP3（固定文本，手机/微信同音色）
+                  ② 后端晓晓 TTS（真实 AI 动态回复）
+                  ③ 浏览器本地朗读（最后兜底）
       每一条朗读都有独立 seq：慢请求返回时若已有更新的朗读/停止，直接丢弃，绝不会叠音。 */
   function speak(text, onend) {
     var content = clean(text);
@@ -99,12 +112,19 @@
     if (audioEl) { try { audioEl.onended = null; audioEl.onerror = null; audioEl.pause(); } catch (e) {} }
     try { if (synth) synth.cancel(); } catch (e) {}
 
+    // ① 固定文本命中预置温柔语音：优先本地 MP3，彻底避开机械音
+    var M = global.BearChatVoiceMap || {};
+    if (M[content]) { speaking = true; return playPreset(M[content], content, onend, seq); }
+
     var C = global.BearConfig || {};
     var AI = global.BearAI || {};
+
+    // 前端直连模式（GitHub Pages 静态站）：没有后端 TTS，别再发注定 404 的 /api/tts 请求，
+    // 直接用最优浏览器音色朗读，避免每次先卡一下。固定文本已在上面命中预置温柔 MP3。
+    if (AI.direct || AI.backendTts === false || !global.fetch) return browserSpeak(content, onend, seq);
+
     var base = C.apiBase || '';
     var ttsPath = C.ttsPath || '/api/tts';
-
-    if (AI.backendTts === false || !global.fetch) return browserSpeak(content, onend, seq);
 
     var ctrl = new AbortController();
     pendingCtrl = ctrl;
