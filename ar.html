@@ -70,40 +70,49 @@ section.chap{padding:64px 0}
 /* ===== AR 效果示意 · 交互预览 ===== */
 .sim{max-width:880px;margin:0 auto;background:#fff;border:2px solid #e7f0f6;border-radius:26px;padding:9px;box-shadow:0 10px 30px rgba(93,140,160,.13)}
 .sim-screen{position:relative;border-radius:18px;overflow:hidden;background:#e9f6fd;border:1px solid rgba(93,180,221,.22)}
-.sim-screen img.room{display:block;width:100%}
+.sim-screen img.room{display:block;width:100%;transition:filter .5s ease}
+.sim.ar .sim-screen img.room,.sim.scanning .sim-screen img.room{filter:saturate(.94) contrast(1.04) brightness(.98)}
+/* 画面暗角：让叠加层浮起来，像取景器 */
+.sim-screen::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .5s ease;background:radial-gradient(118% 96% at 50% 44%,rgba(8,40,62,0) 52%,rgba(8,40,62,.30) 100%)}
+.sim.ar .sim-screen::after,.sim.scanning .sim-screen::after{opacity:1}
 .sim-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .sim-overlay .ar-layer{opacity:0;transition:opacity .5s ease}
 .sim.ar .sim-overlay .ar-layer,.sim.scanning .sim-overlay .ar-layer{opacity:1}
 /* 轻量扫描框、四角定位、定位点 */
-.sim-overlay .frame-dash{fill:rgba(93,180,221,.05);stroke:rgba(255,255,255,.75);stroke-width:2.4;stroke-dasharray:9 12}
-.sim-overlay .frame-corner{fill:none;stroke:#ffd166;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
-.sim-overlay .frame-cross{stroke:rgba(255,255,255,.85);stroke-width:2.2;stroke-linecap:round;fill:none}
-.sim-overlay .frame-pin{fill:#fff;stroke:#5db4dd;stroke-width:2.4}
-/* 半透明身体与器官轮廓 */
-.sim-overlay .body-ghost{fill:rgba(255,255,255,.07);stroke:rgba(255,255,255,.46);stroke-width:2.4;stroke-dasharray:8 10}
-.sim-overlay .org-shape{fill:rgba(255,255,255,.2);stroke:rgba(255,255,255,.78);stroke-width:2.6;transition:fill .3s,stroke .3s,opacity .3s}
-.sim-overlay .org-detail{fill:none;stroke:rgba(255,255,255,.8);stroke-width:2;stroke-linecap:round}
-.sim-overlay .org-halo{fill:rgba(93,180,221,.08);stroke:rgba(93,180,221,.45);stroke-width:2;stroke-dasharray:5 8;transition:.3s}
-.sim-overlay .org:not(.on) .org-shape,.sim-overlay .org:not(.on) .org-halo,.sim-overlay .org:not(.on) .org-detail{opacity:.5}
-.sim-overlay .org.on .org-shape{fill:rgba(255,209,102,.48);stroke:#ff8a70;stroke-width:3.4}
-.sim.scanning .sim-overlay .frame-dash{fill:rgba(255,209,102,.08);stroke:rgba(255,209,102,.9);stroke-width:3}
-.sim.scanning .sim-overlay .frame-corner{stroke:#ffb347;stroke-width:6}
-.sim-overlay .org.on .org-halo{fill:rgba(255,138,112,.14);stroke:#ff8a70;stroke-width:3;stroke-dasharray:none;animation:pinpop .6s ease-out 1}
-@keyframes pinpop{0%{opacity:.15}55%{opacity:1}100%{opacity:.8}}
+.sim-overlay .frame-dash{fill:rgba(93,180,221,.04);stroke:rgba(255,255,255,.62);stroke-width:2;stroke-dasharray:7 10}
+.sim-overlay .frame-corner{fill:none;stroke:#ffd166;stroke-width:4.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 6px rgba(70,40,0,.25))}
+.sim-overlay .frame-cross{stroke:rgba(255,255,255,.8);stroke-width:2;stroke-linecap:round;fill:none}
+.sim-overlay .frame-pin{fill:#fff;stroke:#5db4dd;stroke-width:2.2}
+/* 器官叠加层：全息投影 */
+.sim-overlay .org{transition:opacity .4s ease}
+.sim-overlay .org:not(.on){opacity:0}
+.sim-overlay .org-img{filter:saturate(1.34) contrast(1.1) drop-shadow(0 0 3px rgba(255,255,255,.9)) drop-shadow(0 16px 22px rgba(10,44,66,.55)) drop-shadow(0 0 30px rgba(120,205,240,.75));animation:orgFloat 5.4s ease-in-out infinite}
+@keyframes orgFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.sim-overlay .org-glow{opacity:.75;transition:opacity .35s}
+.sim-overlay .org.on .org-glow{opacity:1}
+.sim-overlay .org-halo{display:none}
+.sim-overlay .org-ticks{fill:none;stroke:#ffd166;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 2px 5px rgba(60,35,0,.3));transition:stroke .3s}
+.sim-overlay .org-halo2{display:none}
+@keyframes ringspin{to{stroke-dashoffset:-144}}
+.sim.scanning .sim-overlay .frame-dash{fill:rgba(255,209,102,.08);stroke:rgba(255,209,102,.9);stroke-width:2.6}
+.sim.scanning .sim-overlay .frame-corner{stroke:#ffb347;stroke-width:5.4}
+.sim-overlay .org.on .org-ticks{stroke:#ffcf5c;animation:pinpop .7s ease-out 1}
+
+@keyframes pinpop{0%{opacity:.15;transform:scale(.86)}55%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
 .sim-overlay .org-hit{fill:rgba(0,0,0,0);pointer-events:none;cursor:pointer}
 .sim.ar .sim-overlay .org-hit,.sim.scanning .sim-overlay .org-hit{pointer-events:auto}
-.sim-overlay .lead{fill:none;stroke:#fff;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .3s}
-.sim-overlay .lead-dot{fill:#ff8a70;stroke:#fff;stroke-width:2.4;opacity:0;transition:opacity .3s}
+.sim-overlay .lead{fill:none;stroke:rgba(255,255,255,.92);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .3s}
+.sim-overlay .lead-dot{fill:#ff8a70;stroke:#fff;stroke-width:2.2;opacity:0;transition:opacity .3s}
 .sim-overlay .org.on .lead,.sim-overlay .org.on .lead-dot{opacity:1}
 /* 标签用 HTML，保证手机上字号不随 viewBox 缩小 */
-.pin-label{position:absolute;left:54.3%;top:60.6%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);border:2px solid #5db4dd;color:#33526b;font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 12px rgba(93,140,160,.2);opacity:0;transition:opacity .3s,left .3s,top .3s;pointer-events:none}
+.pin-label{position:absolute;left:60.8%;top:56.5%;transform:translateY(-50%);display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(93,180,221,.55);color:#2f4f66;font-size:13px;font-weight:800;letter-spacing:.02em;padding:7px 14px 7px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 22px rgba(20,60,85,.24),inset 0 1px 0 rgba(255,255,255,.9);opacity:0;transition:opacity .3s,left .35s ease,top .35s ease;pointer-events:none}
 .sim.ar .pin-label,.sim.scanning .pin-label{opacity:1}
 .pin-label.to-left{transform:translate(-100%,-50%)}
 .pin-label .pl-dot{width:8px;height:8px;border-radius:50%;background:#ff8a70;flex:none}
-.sim-scanline{position:absolute;left:40%;right:39.5%;height:12px;top:38%;border-radius:99px;background:linear-gradient(180deg,rgba(255,209,102,0),rgba(255,209,102,.5) 38%,rgba(255,138,112,.62) 50%,rgba(255,209,102,.5) 62%,rgba(255,209,102,0));box-shadow:0 0 20px rgba(255,190,110,.85);opacity:0}
+.sim-scanline{position:absolute;left:40.4%;right:40.4%;height:11px;top:38%;border-radius:99px;background:linear-gradient(180deg,rgba(255,209,102,0),rgba(255,209,102,.5) 38%,rgba(255,138,112,.62) 50%,rgba(255,209,102,.5) 62%,rgba(255,209,102,0));box-shadow:0 0 20px rgba(255,190,110,.85);opacity:0}
 .sim-scanline::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;transform:translateY(-50%);border-radius:2px;background:linear-gradient(90deg,transparent,#fff 18%,#ffd166 50%,#fff 82%,transparent)}
 .sim.scanning .sim-scanline{opacity:1;animation:scanmove 1.55s ease-in-out 2}
-@keyframes scanmove{0%{top:38%}50%{top:73%}100%{top:38%}}
+@keyframes scanmove{0%{top:37.5%}50%{top:78%}100%{top:37.5%}}
 .sim-badge{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.94);border:1.5px solid rgba(93,180,221,.5);color:#2e6f94;font-size:12px;font-weight:800;padding:6px 13px;border-radius:999px;box-shadow:0 4px 12px rgba(93,140,160,.16)}
 .sim-status{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.94);color:#33526b;font-size:12.5px;font-weight:800;padding:8px 15px;border-radius:999px;border:1.5px solid rgba(93,180,221,.45);max-width:78%;box-shadow:0 4px 12px rgba(93,140,160,.16)}
 /* 控制区：三个独立分组、浅色底 */
@@ -148,17 +157,14 @@ section.chap{padding:64px 0}
 @media(max-width:720px){.sim-controls{grid-template-columns:1fr;gap:13px}.ctl-group+.ctl-group{border-left:none;border-top:1.5px dashed #d9e9f3;padding-left:0;padding-top:12px}}
 @media(max-width:620px){.sim{border-radius:20px;padding:6px}.sim-explain{padding:15px 16px}.ex-rows{grid-template-columns:1fr}.sim-status{font-size:11px;max-width:84%}.sim-badge{font-size:10.5px;padding:5px 10px}.pin-label{font-size:11px;padding:4px 9px;border-width:1.5px}.ex-chip{margin-left:0}
   /* 叠加层随 viewBox 缩小，窄屏把描边补粗，保证扫描框与轮廓看得清 */
-  .sim-overlay .frame-dash,.sim-overlay .body-ghost{stroke-width:6;stroke-dasharray:20 26}
-  .sim-overlay .frame-dash{stroke:rgba(255,255,255,.58)}
-  .sim-overlay .body-ghost{stroke:rgba(255,255,255,.4)}
-  .sim-overlay .frame-corner{stroke-width:12}
-  .sim-overlay .frame-cross,.sim-overlay .org-detail{stroke-width:5}
-  .sim-overlay .org-shape{stroke-width:6}
-  .sim-overlay .org.on .org-shape{stroke-width:8}
-  .sim-overlay .org-halo{stroke-width:5}
-  .sim-overlay .org.on .org-halo{stroke-width:7}
-  .sim-overlay .lead{stroke-width:8}
-  .sim-overlay .lead-dot,.sim-overlay .frame-pin{stroke-width:5}}
+  .sim-overlay .frame-dash{stroke-width:5;stroke-dasharray:16 22}
+  .sim-overlay .frame-dash{stroke:rgba(255,255,255,.55)}
+  .sim-overlay .frame-corner{stroke-width:10}
+  .sim-overlay .frame-cross{stroke-width:4.5}
+  .sim-overlay .org-ticks{stroke-width:7}
+  .sim-overlay .org{transform-box:fill-box;transform-origin:center;transform:scale(1.22)}
+  .sim-overlay .lead{stroke-width:6}
+  .sim-overlay .lead-dot,.sim-overlay .frame-pin{stroke-width:4}}
 @media(prefers-reduced-motion:reduce){.sim.scanning .sim-scanline{animation:none}.sim-overlay .org.on .org-halo{animation:none}}
 
 /* ===== 30 秒演示动画（同样改成轻薄浅色外框） ===== */
@@ -343,43 +349,56 @@ footer .foot-note{margin-top:8px;font-size:12px;color:#8fb0c2;max-width:680px;ma
         <img class="room" src="assets/sim_room.webp" alt="示意插画：戴轻量观影眼镜的孩子坐在病床上，旁边有平板和识别卡，妈妈陪着">
         <!-- 与插画等比例（1400×934）的叠加层：坐标直接对应孩子身体 -->
         <svg class="sim-overlay" viewBox="0 0 1400 934" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <radialGradient id="orgGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="rgba(255,255,255,.30)"/>
+              <stop offset="38%" stop-color="rgba(150,222,246,.20)"/>
+              <stop offset="72%" stop-color="rgba(150,222,246,.07)"/>
+              <stop offset="100%" stop-color="rgba(150,222,246,0)"/>
+            </radialGradient>
+          </defs>
           <g class="ar-layer">
-            <!-- 轻量扫描框 + 四角定位 + 定位点 -->
-            <rect class="frame-dash" x="558" y="352" width="292" height="352" rx="28"/>
-            <path class="frame-corner" d="M558 396V372q0-20 20-20h22 M828 352h20q20 0 20 20v24 M558 660v24q0 20 20 20h22 M828 704h20q20 0 20-20v-24"/>
-            <path class="frame-cross" d="M693 342v20M683 352h20 M693 694v20M683 704h20"/>
-            <circle class="frame-pin" cx="558" cy="352" r="6"/><circle class="frame-pin" cx="850" cy="352" r="6"/>
-            <circle class="frame-pin" cx="558" cy="704" r="6"/><circle class="frame-pin" cx="850" cy="704" r="6"/>
-            <circle class="frame-pin" cx="693" cy="528" r="4"/>
-            <!-- 半透明身体轮廓 -->
-            <ellipse class="body-ghost" cx="693" cy="470" rx="106" ry="110"/>
-            <path class="body-ghost" d="M598 590Q693 566 788 590L802 700Q693 722 584 700Z"/>
-            <!-- 小喉咙：颈部，下巴正下方 -->
+            <!-- 识别框 + 四角定位 + 十字标 -->
+            <rect class="frame-dash" x="566" y="346" width="268" height="402" rx="26"/>
+            <path class="frame-corner" d="M566 388V366q0-20 20-20h22 M812 346h22q20 0 20 20v22 M566 726v22q0 20 20 20h22 M812 748h22q20 0 20-20v-22"/>
+            <path class="frame-cross" d="M700 336v20M690 346h20 M700 748v20M690 758h20"/>
+            <circle class="frame-pin" cx="566" cy="346" r="5.5"/><circle class="frame-pin" cx="834" cy="346" r="5.5"/>
+            <circle class="frame-pin" cx="566" cy="748" r="5.5"/><circle class="frame-pin" cx="834" cy="748" r="5.5"/>
+            <!-- 小喉咙：脖子正中，下巴往下一点点 -->
             <g class="org on" data-o="throat">
-              <circle class="org-halo" cx="693" cy="588" r="30"/>
-              <rect class="org-shape" x="680" y="566" width="26" height="44" rx="13"/>
-              <path class="org-detail" d="M684 578h18M684 588h18M684 598h18"/>
-              <circle class="org-hit" cx="693" cy="588" r="26"/>
-              <path class="lead" d="M700 584L742 566L758 566"/>
-              <circle class="lead-dot" cx="700" cy="584" r="6"/>
+              <circle class="org-glow" cx="700" cy="612" r="116" fill="url(#orgGlow)"/>
+              <g class="org-ticks">
+                <path d="M656 566V550H672"/><path d="M744 566V550H728"/>
+                <path d="M656 658V674H672"/><path d="M744 658V674H728"/>
+              </g>
+              <image class="org-img" href="assets/phone/ar-holo-throat.webp" x="634" y="546" width="132" height="132" preserveAspectRatio="xMidYMid meet"/>
+              <circle class="org-hit" cx="700" cy="612" r="58"/>
+              <path class="lead" d="M748 596L798 586L836 582"/>
+              <circle class="lead-dot" cx="748" cy="596" r="4.6"/>
             </g>
-            <!-- 心脏：胸口略偏左 -->
+            <!-- 心脏：胸口中间略偏左 -->
             <g class="org" data-o="heart">
-              <circle class="org-halo" cx="676" cy="620" r="40"/>
-              <path class="org-shape" d="M676 646C658 630 640 616 640 602c0-12 10-20 22-20 6 0 11 3 14 7 3-4 8-7 14-7 12 0 22 8 22 20 0 14-18 28-36 44z"/>
-              <path class="org-detail" d="M652 600q10-8 20-4M680 596q10-4 20 4"/>
-              <circle class="org-hit" cx="676" cy="620" r="28"/>
-              <path class="lead" d="M664 620L646 620L630 620"/>
-              <circle class="lead-dot" cx="664" cy="620" r="6"/>
+              <circle class="org-glow" cx="694" cy="646" r="128" fill="url(#orgGlow)"/>
+              <g class="org-ticks">
+                <path d="M623 589V575H641"/><path d="M765 589V575H747"/>
+                <path d="M623 703V717H641"/><path d="M765 703V717H747"/>
+              </g>
+              <image class="org-img" href="assets/phone/ar-holo-heart.webp" x="629" y="581" width="130" height="130" preserveAspectRatio="xMidYMid meet"/>
+              <circle class="org-hit" cx="694" cy="646" r="60"/>
+              <path class="lead" d="M640 640L612 622L606 616"/>
+              <circle class="lead-dot" cx="640" cy="640" r="4.6"/>
             </g>
-            <!-- 胃：上腹部略偏右 -->
+            <!-- 胃：上腹部，略偏右 -->
             <g class="org" data-o="stomach">
-              <circle class="org-halo" cx="712" cy="662" r="40"/>
-              <path class="org-shape" d="M706 628q-6 18 2 32-22 10-18 30 6 18 30 16 28-2 30-26 2-18-14-28 6-18-6-26-14-6-24 2z"/>
-              <path class="org-detail" d="M744 672q12 6 8 20"/>
-              <circle class="org-hit" cx="712" cy="662" r="28"/>
-              <path class="lead" d="M722 666L752 680L772 680"/>
-              <circle class="lead-dot" cx="722" cy="666" r="6"/>
+              <circle class="org-glow" cx="712" cy="694" r="126" fill="url(#orgGlow)"/>
+              <g class="org-ticks">
+                <path d="M642 638V624H660"/><path d="M782 638V624H764"/>
+                <path d="M642 750V764H660"/><path d="M782 750V764H764"/>
+              </g>
+              <image class="org-img" href="assets/phone/ar-holo-stomach.webp" x="648" y="630" width="128" height="128" preserveAspectRatio="xMidYMid meet"/>
+              <circle class="org-hit" cx="712" cy="694" r="62"/>
+              <path class="lead" d="M656 696L630 692L622 692"/>
+              <circle class="lead-dot" cx="656" cy="696" r="4.6"/>
             </g>
           </g>
         </svg>
@@ -744,7 +763,7 @@ var rescanBtn=document.getElementById('rescanBtn');
 var simOrgans=document.getElementById('simOrgans');
 var ORGAN_DATA={
   throat:{
-    name:'小喉咙',emoji:'🎤',sub:'身体里的小小通道',pin:{left:'54.3%',top:'60.6%',toLeft:false},
+    name:'小喉咙',emoji:'🎤',sub:'身体里的小小通道',pin:{left:'60.5%',top:'62.7%',toLeft:false},
     where:'叫「咽喉」，在脖子中间、下巴往下一点点。说话、唱歌、咽口水都要经过它。',
     why:'做扁桃体或腺样体相关手术时会讲到它。先认识这个地方，就知道手术在哪里、为什么术前要暂时不吃东西。',
     kid:'🧸 小熊说：这里是你声音的小通道，术后它会有点累，好好休息就会慢慢好起来。',
@@ -752,7 +771,7 @@ var ORGAN_DATA={
     facts:['会厌：吞咽时像小盖子一样盖住气管口，让食物和空气各走各路。','扁桃体：守在喉咙口的小卫士，反复发炎影响呼吸睡眠时，医生才会评估手术。','声带：两片小琴弦，呼气时一振动，就有了说话和唱歌的声音。']
   },
   heart:{
-    name:'心脏',emoji:'❤️',sub:'一直在跳的小水泵',pin:{left:'45%',top:'66.4%',toLeft:true},
+    name:'心脏',emoji:'❤️',sub:'一直在跳的小水泵',pin:{left:'43.5%',top:'65.2%',toLeft:true},
     where:'在胸口中间、稍微偏左一点点，把手放在胸前「咚、咚」跳的就是它。',
     why:'如果是心脏相关的检查或手术，医生会先让孩子知道这台「小水泵」在哪里，再讲检查时贴的小贴片和听诊器。',
     kid:'🧸 小熊说：它从你出生起就一直工作，连你睡着的时候也没休息哦。',
@@ -760,7 +779,7 @@ var ORGAN_DATA={
     facts:['心室：像两个泵水车间，一收缩就把血液送到全身，「咚咚」声是它工作的节拍。','瓣膜：只朝一个方向开的小阀门，保证血液不倒流。','冠状动脉：给心脏自己供血的专用小水管。']
   },
   stomach:{
-    name:'胃',emoji:'🍚',sub:'装食物的小袋子',pin:{left:'55.3%',top:'72.8%',toLeft:false},
+    name:'胃',emoji:'🍚',sub:'装食物的小袋子',pin:{left:'44.2%',top:'74.2%',toLeft:true},
     where:'在上腹部，两边肋骨下面的中间，吃下去的东西会先到这里。',
     why:'手术前要禁食，就是让这个「小袋子」空下来，麻醉时才更安全。医生讲它，是帮孩子明白为什么要暂时不吃不喝。',
     kid:'🧸 小熊说：手术那天让它先好好休息一下，等医生说可以吃了，我们再一起吃点好吃的。',
