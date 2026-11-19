@@ -161,7 +161,77 @@
     };
   }
 
-  /* —— 核心回复：真实 AI 优先，失败降级 —— */
+  /* ===== 儿童模式：温柔话术库选句（回复一定是预录温柔 MP3，根治手机机械音） ===== */
+
+  // 最近用过的句子 id，用于让 AI 尽量换一句、避免重复
+  var recentIds = [];
+
+  function allPhrases() { return global.BearPhrases || []; }
+
+  // 本地关键词兜底匹配：网络不通/AI 选句失败时，也能对症挑一句温柔话
+  function localPick(text, context) {
+    var P = allPhrases();
+    if (!P.length) return null;
+    var lower = String(text || '').toLowerCase();
+    var ctx = context || {};
+    var best = null, bestScore = 0;
+    for (var i = 0; i < P.length; i++) {
+      var p = P[i], score = 0;
+      var keys = p.keywords || [];
+      for (var j = 0; j < keys.length; j++) {
+        if (lower.indexOf(String(keys[j]).toLowerCase()) > -1) score += 3;
+      }
+      // 徽章上下文：提到勋章/惊喜时，优先挑勋章、小惊喜类
+      if (ctx.badgeCount > 0 && /勋章|徽章|惊喜|闯关|奖励/.test(p.label + p.text)) score += 1;
+      // 最近用过的降权，减少重复
+      var ri = recentIds.indexOf(p.id);
+      if (ri > -1) score -= (recentIds.length - ri) * 2;
+      if (score > bestScore) { bestScore = score; best = p; }
+    }
+    return best;
+  }
+
+  function deliverPhrase(p, myToken) {
+    if (!p || myToken !== sessionToken) return false;
+    recentIds.push(p.id);
+    if (recentIds.length > 5) recentIds = recentIds.slice(-5);
+    history.push({ role: 'assistant', content: p.text });
+    addMessage(p.text, 'bear', {
+      tag: '小熊的心里话',
+      typewriter: true,
+      onDone: function () { autoSpeak(p.text); }   // 命中预录温柔 MP3，手机/微信音色一致
+    });
+    global.BearEmotion.flash(aiEmotion(p.text), 2600);
+    setStatus('小熊在线 · 随时可以问我');
+    busy = false;
+    return true;
+  }
+
+  // 儿童模式：从话术库里挑一句。AI 在线时让 AI 选，失败/离线用本地匹配。
+  async function childReply(text, myToken) {
+    var P = allPhrases();
+    var ctx = pageContext();
+    var AI = global.BearAI;
+    if (online && AI && AI.pick && P.length) {
+      var res = await AI.pick(P.map(function (p) {
+        return { id: p.id, label: p.label, text: p.text };
+      }), history.slice(), ctx);
+      if (myToken !== sessionToken) return;
+      if (res.ok && P[res.id]) { deliverPhrase(P[res.id], myToken); return; }
+    }
+    // 本地兜底
+    var p = localPick(text, ctx) || P[0];
+    deliverPhrase(p, myToken);
+  }
+
+  function aiEmotion(t) {
+    if (/抱抱|陪你|别怕|深呼吸|勇敢|勋章|一直/.test(t)) return 'comforting';
+    if (/开心|笑|喜欢|厉害|棒|勇敢|惊喜/.test(t)) return 'happy';
+    if (/你好|嗨|见面|再来/.test(t)) return 'wave';
+    return 'idle';
+  }
+
+  /* —— 核心回复：儿童模式走温柔话术库；家长模式走真实 AI —— */
   async function reply(text) {
     if (busy) return;
     busy = true;
@@ -176,10 +246,17 @@
     history.push({ role: 'user', content: String(text).slice(0, 2000) });
     if (history.length > 12) history = history.slice(-12);
 
+    // 儿童模式：从温柔话术库选句（手机端温柔音的关键）
+    if (mode === 'child') {
+      await childReply(text, myToken);
+      return;
+    }
+
+    // 家长模式：保留完全自由的真实 AI（专业咨询，音色不受孩子模式影响）
     var AI = global.BearAI;
     if (AI && online) {
       var res = await AI.ask(history.slice(), mode, pageContext());
-      if (myToken !== sessionToken) return;   // 期间切换了模式/清空，丢弃旧结果
+      if (myToken !== sessionToken) return;
       if (res.ok) {
         history.push({ role: 'assistant', content: res.reply });
         addMessage(res.reply, 'bear', {
@@ -192,14 +269,12 @@
         busy = false;
         return;
       }
-      // 后端调用失败：自动降级
       addMessage('（网络开小差了，先用离线小知识回答你）', 'bear', { tag: '离线样例 · 非实时 AI' });
     }
 
-    // 本地样例降级
     var l = localReply(text);
     setTimeout(function () {
-      if (myToken !== sessionToken) return;   // 期间切换了模式/清空，丢弃旧结果
+      if (myToken !== sessionToken) return;
       addMessage(l.text, 'bear', {
         tag: '离线样例 · 非实时 AI',
         typewriter: true,

@@ -128,12 +128,78 @@
     }
   }
 
+  /** 儿童模式「温柔话术库选句」：让 AI 从预置句库里挑最贴切的一句 id。
+      这样回复一定是预先录好的晓晓温柔 MP3，手机/微信音色一致，根治机械音。
+      candidates: [{id, label, text}]；返回 {ok, id}。 */
+  async function pick(candidates, history, context) {
+    if (!global.fetch || !candidates || !candidates.length) return { ok: false };
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 30000);
+    var list = candidates.map(function (c) {
+      return '[' + c.id + '] ' + c.label + '：' + c.text;
+    }).join('\n');
+    var ctxBits = [];
+    if (context) {
+      if (typeof context.badgeCount === 'number' && context.badgeCount > 0) {
+        ctxBits.push('孩子已集齐 ' + context.badgeCount + ' 枚勋章' +
+          (context.badgeNames && context.badgeNames.length ? '（' + context.badgeNames.join('、') + '）' : ''));
+      }
+      if (context.lastBadge) ctxBits.push('刚拿到勋章：' + context.lastBadge);
+      if (context.page) ctxBits.push('当前页面：' + context.page);
+      if (context.organ) ctxBits.push('在看器官：' + context.organ);
+    }
+    var sys = [
+      '你是「小熊」，在陪一个小朋友轻轻聊天。下面是从小熊话术库里挑出来的候选句子，每句都有编号。',
+      '你的唯一任务：读孩子最新一句话和聊天记录，挑出【最贴切的一句】。',
+      '要求：① 必须接住孩子这一句（他说害怕就挑安慰的、说喜欢恐龙就挑恐龙那句、说拿到勋章就挑勋章那句）。',
+      '② 挑和上一句【不同类型】的，让聊天有来有回、不重复。③ 只输出一个数字（那句的编号），不要输出任何别的字、标点或解释。',
+      '========== 候选句子 ==========',
+      list,
+      '========== 当前情况（仅参考）==========',
+      ctxBits.length ? ctxBits.join('；') : '无'
+    ].join('\n');
+    var msgs = [{ role: 'system', content: sys }];
+    var recent = (history || []).slice(-6);
+    for (var i = 0; i < recent.length; i++) {
+      var m = recent[i];
+      if (!m || (m.role !== 'user' && m.role !== 'assistant')) continue;
+      // 历史里 assistant 是选中的句子，给 AI 看文本有助于避免重复
+      msgs.push({ role: m.role, content: String(m.content || '').slice(0, 200) });
+    }
+    if (!msgs.length || msgs[msgs.length - 1].role !== 'user') {
+      msgs.push({ role: 'user', content: '你好呀，小熊。' });
+    }
+    try {
+      var r = await fetch(API_URL, {
+        method: 'POST', signal: ctrl.signal,
+        headers: { 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: MODEL, messages: msgs,
+          max_tokens: 12, temperature: 0.2
+        })
+      });
+      var data = await r.json();
+      if (!r.ok) return { ok: false, reason: 'http_' + r.status };
+      var out = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      var m2 = String(out || '').match(/\d+/);
+      if (!m2) return { ok: false, reason: 'no_number' };
+      var id = parseInt(m2[0], 10);
+      if (id < 0 || id >= candidates.length) return { ok: false, reason: 'out_of_range', got: id };
+      return { ok: true, id: id };
+    } catch (e) {
+      return { ok: false, reason: (e && e.name === 'AbortError') ? 'timeout' : 'network' };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   /** 直连模式恒在线 */
   async function health() { return true; }
 
   global.BearConfig = cfg;
   global.BearAI = {
     ask: ask,
+    pick: pick,
     health: health,
     isConfigured: function () { return true; },
     direct: true

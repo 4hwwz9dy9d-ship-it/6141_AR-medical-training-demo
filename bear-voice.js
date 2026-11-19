@@ -145,8 +145,11 @@
     try { if (synth) synth.cancel(); } catch (e) {}
 
     // ① 固定文本命中预置温柔语音：优先本地 MP3，彻底避开机械音
+    //    两个映射：早期固定话术 + 儿童温柔话术库（71 条晓晓预录音）
     var M = global.BearChatVoiceMap || {};
-    if (M[content]) { speaking = true; return playPreset(M[content], content, onend, seq); }
+    var PM = global.BearPhraseVoiceMap || {};
+    var preset = M[content] || PM[content];
+    if (preset) { speaking = true; return playPreset(preset, content, onend, seq); }
 
     var C = global.BearConfig || {};
     var AI = global.BearAI || {};
